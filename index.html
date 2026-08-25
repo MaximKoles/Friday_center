@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Сентябрь 2026 — Пространство «Пятница»</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #121b24;
+      --bg-card: #182330;
+      --bg-cell: #1d2c3c;
+      --bg-cell-empty: #15202b;
+      --border: #293d52;
+      
+      /* Фирменная палитра дифференциации */
+      --cat-lecture: #e5b83b;       /* Желтый — Лекции */
+      --cat-club: #9e3f35;          /* Терракотовый — Клубы и встречи */
+      --cat-other: #789242;         /* Зеленый — Игры, шоу, спектакли, остальное */
+
+      --cat-lecture-text: #121b24;
+      --cat-club-text: #f5eedc;
+      --cat-other-text: #f5eedc;
+
+      --text-main: #f5eedc;
+      --text-muted: #8da2b5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 10px 32px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 540px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .brand-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(229, 184, 59, 0.12);
+      color: var(--cat-lecture);
+      border: 1px solid rgba(229, 184, 59, 0.28);
+      padding: 4px 12px;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .brand-tag::before {
+      content: "✦";
+      font-size: 0.85rem;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+
+    /* Памятка по цветам */
+    .legend-bar {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 10px 0 14px;
+      padding: 6px 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .legend-dot.lecture { background-color: var(--cat-lecture); }
+    .legend-dot.club { background-color: var(--cat-club); }
+    .legend-dot.other { background-color: var(--cat-other); }
+
+    .calendar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 10px 8px 12px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+    }
+
+    .weekdays-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    .weekday {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 4px 0;
+      text-transform: uppercase;
+    }
+
+    .weekday.weekend {
+      color: #e57368;
+    }
+
+    .days-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+
+    .day-cell {
+      background-color: var(--bg-cell);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      min-height: 62px;
+      padding: 4px 2px 3px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .day-cell.other-month {
+      background-color: var(--bg-cell-empty);
+      border-color: rgba(41, 61, 82, 0.35);
+      opacity: 0.25;
+    }
+
+    .day-header {
+      display: flex;
+      justify-content: flex-start;
+      padding: 0 3px 2px;
+    }
+
+    .day-num {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1;
+    }
+
+    .day-cell.weekend .day-num {
+      color: #e57368;
+    }
+
+    .events-list {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      flex-grow: 1;
+    }
+
+    /* Кнопки времени с цветами категорий */
+    .time-btn {
+      display: block;
+      text-decoration: none;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 3px 1px;
+      border-radius: 5px;
+      text-align: center;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      transition: transform 0.1s ease, filter 0.1s ease;
+    }
+
+    .time-btn.type-lecture {
+      background-color: var(--cat-lecture);
+      color: var(--cat-lecture-text);
+    }
+
+    .time-btn.type-club {
+      background-color: var(--cat-club);
+      color: var(--cat-club-text);
+    }
+
+    .time-btn.type-other {
+      background-color: var(--cat-other);
+      color: var(--cat-other-text);
+    }
+
+    .time-btn:active {
+      transform: scale(0.93);
+      filter: brightness(0.9);
+    }
+
+    /* Модальные окна (Zero-JS :target) */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(10, 16, 22, 0.82);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.18s ease, visibility 0.18s ease;
+      z-index: 1000;
+    }
+
+    .modal-overlay:target {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .modal-backdrop-link {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+      z-index: 1;
+    }
+
+    .modal-card {
+      position: relative;
+      z-index: 2;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+      overflow: hidden;
+      animation: popModal 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.25);
+    }
+
+    @keyframes popModal {
+      from { transform: scale(0.92); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 14px 16px;
+      background: #111a24;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .close-btn {
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 1.4rem;
+      text-decoration: none;
+      line-height: 1;
+      padding: 4px 6px;
+      border-radius: 6px;
+    }
+
+    .close-btn:active {
+      color: var(--cat-lecture);
+    }
+
+    .modal-body {
+      padding: 14px;
+      max-height: 65vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .event-card {
+      background: #111b26;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .event-card.type-lecture { border-left: 3px solid var(--cat-lecture); }
+    .event-card.type-club { border-left: 3px solid var(--cat-club); }
+    .event-card.type-other { border-left: 3px solid var(--cat-other); }
+
+    .event-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .event-time-badge {
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 2px 7px;
+      border-radius: 4px;
+      letter-spacing: -0.01em;
+    }
+
+    .event-card.type-lecture .event-time-badge {
+      background: var(--cat-lecture);
+      color: var(--cat-lecture-text);
+    }
+
+    .event-card.type-club .event-time-badge {
+      background: var(--cat-club);
+      color: var(--cat-club-text);
+    }
+
+    .event-card.type-other .event-time-badge {
+      background: var(--cat-other);
+      color: var(--cat-other-text);
+    }
+
+    .event-cost {
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--cat-lecture);
+    }
+
+    .event-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      line-height: 1.35;
+      color: var(--text-main);
+    }
+
+    .event-action {
+      margin-top: 2px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .event-action a {
+      color: var(--cat-lecture);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .footer-bar {
+      margin-top: 14px;
+      padding: 12px 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .footer-bar a {
+      color: var(--cat-lecture);
+      font-weight: 700;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div class="brand-tag">Досуговый центр «Пятница»</div>
+      <h1>Сентябрь 2026</h1>
+    </header>
+
+    <!-- Памятка по категориям событий -->
+    <div class="legend-bar">
+      <div class="legend-item"><span class="legend-dot lecture"></span> Лекции</div>
+      <div class="legend-item"><span class="legend-dot club"></span> Клубы и встречи</div>
+      <div class="legend-item"><span class="legend-dot other"></span> Игры и события</div>
+    </div>
+
+    <div class="calendar-card">
+      <div class="weekdays-grid">
+        <div class="weekday">Пн</div>
+        <div class="weekday">Вт</div>
+        <div class="weekday">Ср</div>
+        <div class="weekday">Чт</div>
+        <div class="weekday">Пт</div>
+        <div class="weekday weekend">Сб</div>
+        <div class="weekday weekend">Вс</div>
+      </div>
+
+      <div class="days-grid">
+        <!-- 31 Авг -->
+        <div class="day-cell other-month"><div class="day-header"><span class="day-num">31</span></div></div>
+
+        <!-- 1 Сент -->
+        <div class="day-cell">
+          <div class="day-header"><span class="day-num">1</span></div>
+          <div class="events-list"><a href="#day-1" class="time-btn type-lecture">19:00</a></div>
+        </div>
+
+        <!-- 2 Сент -->
+        <div class="day-cell"><div class="day-header"><span class="day-num">2</span></div></div>
+
+        <!-- 3 Сент -->
+        <div class="day-cell">
+          <div class="day-header"><span class="day-num">3</span></div>
+          <div class="events-list"><a href="#day-3" class="time-btn type-other">19:00</a></div>
+        </div>
+
+        <!-- 4 Сент -->
+        <div class="day-cell"><div class="day-header"><span class="day-num">4</span></div></div>
+
+        <!-- 5 Сент -->
+        <div class="day-cell weekend"><div class="day-header"><span class="day-num">5</span></div></div>
+
+        <!-- 6 Сент -->
+        <div class="day-cell weekend">
+          <div class="day-header"><span class="day-num">6</span></div>
+          <div class="events-list">
+            <a href="#day-6" class="time-btn type-other">12:00</a>
+            <a href="#day-6" class="time-btn type-lecture">17:00</a>
+          </div>
+        </div>
+
+        <!-- 7 Сент -->
+        <div class="day-cell">
+          <div class="day-header"><span class="day-num">7</span></div>
+          <div class="events-list"><a href="#day-7" class="time-btn type-club">19:00</a></div>
+        </div>
+
+        <!-- 8 Сент -->
+        <div class="day-cell">
+          <div class="day-header"><span class="day-num">8</span></div>
+          <div class="events-list">
+            <a href="#day-8" class="time-btn type-club">15:00</a>
+            <a href="#day-8" class="time-btn type-club">19:00</a>
+          </div>
+        </div>
+
+        <!-- 9 Сент -->
+        <div class="day-cell">
+          <div class="day-header"><span class="day-num">9</span></div>
+          <div class="events-list"><a href="#day-9" class="time-btn type-other">19:00</a></div>
+        </div>
+
+        <!-- 10 Сент -->
+        <div class="day-cell">
+          <div class="day-header"><span class="day-num">10</span></div>
+          <div class="events-list"><a href="#day-10" class="time-btn type-lecture">19:00</a></div>
+        </div>
+
+        <!-- 11 Сент -->
+        <div class="day-cell"><div class="day-header"><span class="day-num">11</span></div></div>
+
+        <!-- 12 Сент -->
+        <div class="day-cell weekend">
+          <div class="day-header"><span class="day-num">12</span></div>
+          <div class="events-list"><a href="#day-12" class="time-btn type-club">12:00</a></div>
+        </div>
+
+        <!-- 13 Сент -->
+        <div class="day-cell weekend"><div class="day-header"><span class="day-num">13</span></div></div>
+
+        <!-- 14 Сент -->
+        <div class="day-cell">
+          <div class="day-header"><span class="day-num">14</span></div>
+          <div class="events-list"><a href="#day-14" class="time-btn type-other">19:00</a></div>
+        </div>
+
+        <!-- 15 Сент -->
+        <div class="day-cell"><div class="day-header"><span class="day-num">15</span></div></div>
+
+        <!-- 16 Сент -->
+        <div class="day-cell">
+          <div class="day-header"><span class="day-num">16</span></div>
+          <div class="events-list"><a href="#day-16" class="time-btn type-club">19:00</a></div>
+        </div>
+
+        <!-- 17 Сент -->
+        <div class="day-cell">
+          <div class="day-header"><span class="day-num">17</span></div>
+          <div class="events-list"><a href="#day-17" class="time-btn type-club">19:00</a></div>
+        </div>
+
+        <!-- 18 Сент -->
+        <div class="day-cell"><div class="day-header"><span class="day-num">18</span></div></div>
+
+        <!-- 19 Сент -->
+        <div class="day-cell weekend"><div class="day-header"><span class="day-num">19</span></div></div>
+
+        <!-- 20 Сент -->
+        <div class="day-cell weekend">
+          <div class="day-header"><span class="day-num">20</span></div>
+          <div class="events-list"><a href="#day-20" class="time-btn type-other">12:00</a></div>
+        </div>
+
+        <!-- 21 Сент -->
+        <div class="day-cell">
+          <div class="day-header"><span class="day-num">21</span></div>
+          <div class="events-list"><a href="#day-21" class="time-btn type-club">19:00</a></div>
+        </div>
+
+        <!-- 22 Сент -->
+        <div class="day-cell">
+          <div class="day-header"><span class="day-num">22</span></div>
+          <div class="events-list">
+            <a href="#day-22" class="time-btn type-club">15:00</a>
+            <a href="#day-22" class="time-btn type-club">19:00</a>
+          </div>
+        </div>
+
+        <!-- 23 Сент -->
+        <div class="day-cell">
+          <div class="day-header"><span class="day-num">23</span></div>
+          <div class="events-list"><a href="#day-23" class="time-btn type-lecture">19:00</a></div>
+        </div>
+
+        <!-- 24 Сент -->
+        <div class="day-cell">
+          <div class="day-header"><span class="day-num">24</span></div>
+          <div class="events-list"><a href="#day-24" class="time-btn type-other">19:00</a></div>
+        </div>
+
+        <!-- 25 Сент -->
+        <div class="day-cell">
+          <div class="day-header"><span class="day-num">25</span></div>
+          <div class="events-list"><a href="#day-25" class="time-btn type-other">15:00</a></div>
+        </div>
+
+        <!-- 26 Сент -->
+        <div class="day-cell weekend"><div class="day-header"><span class="day-num">26</span></div></div>
+
+        <!-- 27 Сент -->
+        <div class="day-cell weekend">
+          <div class="day-header"><span class="day-num">27</span></div>
+          <div class="events-list"><a href="#day-27" class="time-btn type-lecture">14:00</a></div>
+        </div>
+
+        <!-- 28 Сент -->
+        <div class="day-cell">
+          <div class="day-header"><span class="day-num">28</span></div>
+          <div class="events-list"><a href="#day-28" class="time-btn type-other">19:00</a></div>
+        </div>
+
+        <!-- 29 Сент -->
+        <div class="day-cell">
+          <div class="day-header"><span class="day-num">29</span></div>
+          <div class="events-list"><a href="#day-29" class="time-btn type-club">18:00</a></div>
+        </div>
+
+        <!-- 30 Сент -->
+        <div class="day-cell">
+          <div class="day-header"><span class="day-num">30</span></div>
+          <div class="events-list"><a href="#day-30" class="time-btn type-other">19:00</a></div>
+        </div>
+
+        <!-- 1-4 Окт -->
+        <div class="day-cell other-month"><div class="day-header"><span class="day-num">1</span></div></div>
+        <div class="day-cell other-month"><div class="day-header"><span class="day-num">2</span></div></div>
+        <div class="day-cell other-month"><div class="day-header"><span class="day-num">3</span></div></div>
+        <div class="day-cell other-month"><div class="day-header"><span class="day-num">4</span></div></div>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      Запись через <a href="https://t.me/lena_timinova">@lena_timinova</a> или резидента события
+    </div>
+  </div>
+
+  <!-- POPUPS (PURE CSS :TARGET) -->
+
+  <!-- 1 Сент (Лекция) -->
+  <div id="day-1" class="modal-overlay">
+    <a href="#" class="modal-backdrop-link"></a>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">1 сентября, вторник</div>
+        <a href="#" class="close-btn">&times;</a>
+      </div>
+      <div class="modal-body">
+        <div class="event-card type-lecture">
+          <div class="event-top">
+            <span class="event-time-badge">19:00</span>
+            <span class="event-cost">900 ₽</span>
+          </div>
+          <div class="event-name">Как сделать красивую презентацию чего угодно. Лекция от Артёма Федосова</div>
+          <div class="event-action">Запись через <a href="https://t.me/lena_timinova">@lena_timinova</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 Сент (Остальное/Игры) -->
+  <div id="day-3" class="modal-overlay">
+    <a href="#" class="modal-backdrop-link"></a>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">3 сентября, четверг</div>
+        <a href="#" class="close-btn">&times;</a>
+      </div>
+      <div class="modal-body">
+        <div class="event-card type-other">
+          <div class="event-top">
+            <span class="event-time-badge">19:00</span>
+            <span class="event-cost">600 ₽</span>
+          </div>
+          <div class="event-name">Спортивная мафия</div>
+          <div class="event-action">Запись через <a href="https://t.me/lena_timinova">@lena_timinova</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 Сент (Остальное + Лекция) -->
+  <div id="day-6" class="modal-overlay">
+    <a href="#" class="modal-backdrop-link"></a>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">6 сентября, воскресенье</div>
+        <a href="#" class="close-btn">&times;</a>
+      </div>
+      <div class="modal-body">
+        <div class="event-card type-other">
+          <div class="event-top">
+            <span class="event-time-badge">12:00</span>
+            <span class="event-cost">800 ₽</span>
+          </div>
+          <div class="event-name">Кукольный спектакль для детей до 10 лет «Три поросенка»</div>
+          <div class="event-action">Запись через <a href="https://t.me/lena_timinova">@lena_timinova</a></div>
+        </div>
+        <div class="event-card type-lecture">
+          <div class="event-top">
+            <span class="event-time-badge">17:00</span>
+            <span class="event-cost">1500 ₽</span>
+          </div>
+          <div class="event-name">Киноистория «Коко Шанель. Женщина, изменившая моду»</div>
+          <div class="event-action">Запись через <a href="https://t.me/lena_timinova">@lena_timinova</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 Сент (Клуб) -->
+  <div id="day-7" class="modal-overlay">
+    <a href="#" class="modal-backdrop-link"></a>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">7 сентября, понедельник</div>
+        <a href="#" class="close-btn">&times;</a>
+      </div>
+      <div class="modal-body">
+        <div class="event-card type-club">
+          <div class="event-top">
+            <span class="event-time-badge">19:00</span>
+            <span class="event-cost">От 400 ₽</span>
+          </div>
+          <div class="event-name">Клуб любителей сериалов</div>
+          <div class="event-action">Запись через <a href="https://t.me/lena_timinova">@lena_timinova</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8 Сент (Клубы) -->
+  <div id="day-8" class="modal-overlay">
+    <a href="#" class="modal-backdrop-link"></a>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">8 сентября, вторник</div>
+        <a href="#" class="close-btn">&times;</a>
+      </div>
+      <div class="modal-body">
+        <div class="event-card type-club">
+          <div class="event-top">
+            <span class="event-time-badge">15:00</span>
+            <span class="event-cost">Взнос 500 ₽</span>
+          </div>
+          <div class="event-name">Зрелые встречи 55+ | Тема уточняется</div>
+          <div class="event-action">Запись через <a href="https://t.me/lena_timinova">@lena_timinova</a></div>
+        </div>
+        <div class="event-card type-club">
+          <div class="event-top">
+            <span class="event-time-badge">19:00</span>
+            <span class="event-cost">От 400 ₽</span>
+          </div>
+          <div class="event-name">Хобби часы | укулеле для начинающих с Ланой Эннс</div>
+          <div class="event-action">Запись через <a href="https://t.me/lena_timinova">@lena_timinova</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 Сент (Остальное) -->
+  <div id="day-9" class="modal-overlay">
+    <a href="#" class="modal-backdrop-link"></a>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">9 сентября, среда</div>
+        <a href="#" class="close-btn">&times;</a>
+      </div>
+      <div class="modal-body">
+        <div class="event-card type-other">
+          <div class="event-top">
+            <span class="event-time-badge">19:00</span>
+            <span class="event-cost">600 ₽</span>
+          </div>
+          <div class="event-name">Домашний покер</div>
+          <div class="event-action">Запись через <a href="https://t.me/lena_timinova">@lena_timinova</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 Сент (Лекция) -->
+  <div id="day-10" class="modal-overlay">
+    <a href="#" class="modal-backdrop-link"></a>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">10 сентября, четверг</div>
+        <a href="#" class="close-btn">&times;</a>
+      </div>
+      <div class="modal-body">
+        <div class="event-card type-lecture">
+          <div class="event-top">
+            <span class="event-time-badge">19:00</span>
+            <span class="event-cost">700 ₽</span>
+          </div>
+          <div class="event-name">Лекция нейробиолога Вероники Малахиевой «Норадреналин и Голубое пятно: механизм страха и фокуса»</div>
+          <div class="event-action">Запись через <a href="https://t.me/lena_timinova">@lena_timinova</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12 Сент (Клуб) -->
+  <div id="day-12" class="modal-overlay">
+    <a href="#" class="modal-backdrop-link"></a>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">12 сентября, суббота</div>
+        <a href="#" class="close-btn">&times;</a>
+      </div>
+      <div class="modal-body">
+        <div class="event-card type-club">
+          <div class="event-top">
+            <span class="event-time-badge">12:00</span>
+            <span class="event-cost">700 ₽</span>
+          </div>
+          <div class="event-name">Встреча книжного клуба «Культурный код/т»</div>
+          <div class="event-action">Запись: <a href="https://t.me/NansyKanva">@NansyKanva</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 14 Сент (Остальное) -->
+  <div id="day-14" class="modal-overlay">
+    <a href="#" class="modal-backdrop-link"></a>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">14 сентября, понедельник</div>
+        <a href="#" class="close-btn">&times;</a>
+      </div>
+      <div class="modal-body">
+        <div class="event-card type-other">
+          <div class="event-top">
+            <span class="event-time-badge">19:00</span>
+            <span class="event-cost">600 ₽</span>
+          </div>
+          <div class="event-name">Иностранный квартирник</div>
+          <div class="event-action">Запись через <a href="https://t.me/lena_timinova">@lena_timinova</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 16 Сент (Клуб / Встреча) -->
+  <div id="day-16" class="modal-overlay">
+    <a href="#" class="modal-backdrop-link"></a>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">16 сентября, среда</div>
+        <a href="#" class="close-btn">&times;</a>
+      </div>
+      <div class="modal-body">
+        <div class="event-card type-club">
+          <div class="event-top">
+            <span class="event-time-badge">19:00</span>
+            <span class="event-cost">Уточняйте</span>
+          </div>
+          <div class="event-name">Арт встреча с Татьяной Чановой «Репин»</div>
+          <div class="event-action">Запись через <a href="https://t.me/lena_timinova">@lena_timinova</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 17 Сент (Клуб) -->
+  <div id="day-17" class="modal-overlay">
+    <a href="#" class="modal-backdrop-link"></a>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">17 сентября, четверг</div>
+        <a href="#" class="close-btn">&times;</a>
+      </div>
+      <div class="modal-body">
+        <div class="event-card type-club">
+          <div class="event-top">
+            <span class="event-time-badge">19:00</span>
+            <span class="event-cost">700 ₽</span>
+          </div>
+          <div class="event-name">Клуб диванных аниме критиков</div>
+          <div class="event-action">Запись: <a href="https://t.me/wise_phylosopher">@wise_phylosopher</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 20 Сент (Остальное) -->
+  <div id="day-20" class="modal-overlay">
+    <a href="#" class="modal-backdrop-link"></a>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">20 сентября, воскресенье</div>
+        <a href="#" class="close-btn">&times;</a>
+      </div>
+      <div class="modal-body">
+        <div class="event-card type-other">
+          <div class="event-top">
+            <span class="event-time-badge">12:00</span>
+            <span class="event-cost">Донат</span>
+          </div>
+          <div class="event-name">Death cafe | Смерть кафе</div>
+          <div class="event-action">Запись: <a href="https://t.me/Pro_thanatos">@Pro_thanatos</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 21 Сент (Клуб) -->
+  <div id="day-21" class="modal-overlay">
+    <a href="#" class="modal-backdrop-link"></a>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">21 сентября, понедельник</div>
+        <a href="#" class="close-btn">&times;</a>
+      </div>
+      <div class="modal-body">
+        <div class="event-card type-club">
+          <div class="event-top">
+            <span class="event-time-badge">19:00</span>
+            <span class="event-cost">800 ₽</span>
+          </div>
+          <div class="event-name">Клуб путешественников</div>
+          <div class="event-action">Запись: <a href="https://t.me/olgagidkrd">@olgagidkrd</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 22 Сент (Клубы) -->
+  <div id="day-22" class="modal-overlay">
+    <a href="#" class="modal-backdrop-link"></a>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">22 сентября, вторник</div>
+        <a href="#" class="close-btn">&times;</a>
+      </div>
+      <div class="modal-body">
+        <div class="event-card type-club">
+          <div class="event-top">
+            <span class="event-time-badge">15:00</span>
+            <span class="event-cost">Уточняйте</span>
+          </div>
+          <div class="event-name">Зрелые встречи 55+ | Тема уточняется</div>
+          <div class="event-action">Запись через <a href="https://t.me/lena_timinova">@lena_timinova</a></div>
+        </div>
+        <div class="event-card type-club">
+          <div class="event-top">
+            <span class="event-time-badge">19:00</span>
+            <span class="event-cost">От 400 ₽</span>
+          </div>
+          <div class="event-name">Хобби клуб укулелистов. Встреча для продолжающих</div>
+          <div class="event-action">Запись через <a href="https://t.me/lena_timinova">@lena_timinova</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 23 Сент (Лекция/Истории) -->
+  <div id="day-23" class="modal-overlay">
+    <a href="#" class="modal-backdrop-link"></a>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">23 сентября, среда</div>
+        <a href="#" class="close-btn">&times;</a>
+      </div>
+      <div class="modal-body">
+        <div class="event-card type-lecture">
+          <div class="event-top">
+            <span class="event-time-badge">19:00</span>
+            <span class="event-cost">1000 ₽</span>
+          </div>
+          <div class="event-name">Музыкальные истории Сергея Острицова. Брайан Джонс</div>
+          <div class="event-action">Запись через <a href="https://t.me/lena_timinova">@lena_timinova</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 24 Сент (Остальное) -->
+  <div id="day-24" class="modal-overlay">
+    <a href="#" class="modal-backdrop-link"></a>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">24 сентября, четверг</div>
+        <a href="#" class="close-btn">&times;</a>
+      </div>
+      <div class="modal-body">
+        <div class="event-card type-other">
+          <div class="event-top">
+            <span class="event-time-badge">19:00</span>
+            <span class="event-cost">1100 ₽</span>
+          </div>
+          <div class="event-name">Драмеди шоу</div>
+          <div class="event-action">Запись через <a href="https://t.me/lena_timinova">@lena_timinova</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 25 Сент (Остальное) -->
+  <div id="day-25" class="modal-overlay">
+    <a href="#" class="modal-backdrop-link"></a>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">25 сентября, пятница</div>
+        <a href="#" class="close-btn">&times;</a>
+      </div>
+      <div class="modal-body">
+        <div class="event-card type-other">
+          <div class="event-top">
+            <span class="event-time-badge">15:00</span>
+            <span class="event-cost">600 ₽</span>
+          </div>
+          <div class="event-name">Домашний покер</div>
+          <div class="event-action">Запись через <a href="https://t.me/lena_timinova">@lena_timinova</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 27 Сент (Лекция) -->
+  <div id="day-27" class="modal-overlay">
+    <a href="#" class="modal-backdrop-link"></a>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">27 сентября, воскресенье</div>
+        <a href="#" class="close-btn">&times;</a>
+      </div>
+      <div class="modal-body">
+        <div class="event-card type-lecture">
+          <div class="event-top">
+            <span class="event-time-badge">14:00</span>
+            <span class="event-cost">700 ₽</span>
+          </div>
+          <div class="event-name">Лекция от проектов «Популярная история» & «Свидание с Краснодаром». «За партой в Российской империи: уроки Екатеринодара»</div>
+          <div class="event-action">Запись через <a href="https://t.me/lena_timinova">@lena_timinova</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 28 Сент (Остальное) -->
+  <div id="day-28" class="modal-overlay">
+    <a href="#" class="modal-backdrop-link"></a>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">28 сентября, понедельник</div>
+        <a href="#" class="close-btn">&times;</a>
+      </div>
+      <div class="modal-body">
+        <div class="event-card type-other">
+          <div class="event-top">
+            <span class="event-time-badge">19:00</span>
+            <span class="event-cost">600 ₽</span>
+          </div>
+          <div class="event-name">Квартирник</div>
+          <div class="event-action">Запись через <a href="https://t.me/lena_timinova">@lena_timinova</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 29 Сент (Клуб) -->
+  <div id="day-29" class="modal-overlay">
+    <a href="#" class="modal-backdrop-link"></a>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">29 сентября, вторник</div>
+        <a href="#" class="close-btn">&times;</a>
+      </div>
+      <div class="modal-body">
+        <div class="event-card type-club">
+          <div class="event-top">
+            <span class="event-time-badge">18:00</span>
+            <span class="event-cost">Уточняйте</span>
+          </div>
+          <div class="event-name">Дискуссионный клуб «Разговоры о». Тема: выбор</div>
+          <div class="event-action">Запись через <a href="https://t.me/lena_timinova">@lena_timinova</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 30 Сент (Остальное) -->
+  <div id="day-30" class="modal-overlay">
+    <a href="#" class="modal-backdrop-link"></a>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">30 сентября, среда</div>
+        <a href="#" class="close-btn">&times;</a>
+      </div>
+      <div class="modal-body">
+        <div class="event-card type-other">
+          <div class="event-top">
+            <span class="event-time-badge">19:00</span>
+            <span class="event-cost">1500 ₽</span>
+          </div>
+          <div class="event-name">Трансформационная игра «Выбор»</div>
+          <div class="event-action">Запись через <a href="https://t.me/lena_timinova">@lena_timinova</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
