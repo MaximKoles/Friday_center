@@ -464,6 +464,45 @@
       color: var(--cat-lecture, #e5b83b);
       text-decoration: underline;
     }
+    .gcal-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(141, 162, 181, 0.08);
+      border: 1px solid rgba(141, 162, 181, 0.2);
+      color: var(--text-muted) !important;
+      font-size: 0.72rem;
+      font-weight: 500;
+      padding: 4px 9px;
+      border-radius: 6px;
+      text-decoration: none !important;
+      transition: all 0.15s ease;
+    }
+
+    .gcal-btn:active {
+      background: rgba(141, 162, 181, 0.18);
+      color: var(--text-main) !important;
+      transform: scale(0.97);
+    }
+    /* Подсветка текущего дня */
+    .day-cell.today {
+      border: 1.5px solid var(--cat-lecture);
+      background: rgba(229, 184, 59, 0.08);
+      box-shadow: 0 0 10px rgba(229, 184, 59, 0.15);
+    }
+
+    .day-cell.today .day-num {
+      color: var(--cat-lecture);
+    }
+
+    .today-tag {
+      font-size: 0.58rem;
+      font-weight: 700;
+      color: var(--cat-lecture);
+      text-transform: uppercase;
+      margin-left: auto;
+      letter-spacing: 0.02em;
+    }
   </style>
 </head>
 <body>
@@ -625,13 +664,21 @@
       }
 
       // Дни месяца
+      const today = new Date();
+      const currentRealMonth = today.getMonth(); // 7 = Август, 8 = Сентябрь
+      const currentRealDate = today.getDate();
+
       for (let day = 1; day <= monthData.totalDays; day++) {
         const dayOfWeekIndex = (monthData.firstDayOffset + day - 1) % 7;
         const isWeekend = dayOfWeekIndex === 5 || dayOfWeekIndex === 6;
         const dayEvents = monthData.events[day];
+        
+        // Проверка на текущий день (Август = индекс 0, Сентябрь = индекс 1)
+        const targetMonthNum = currentMonthIndex === 0 ? 7 : 8;
+        const isToday = currentRealMonth === targetMonthNum && currentRealDate === day;
 
         const cell = document.createElement("div");
-        cell.className = `day-cell ${isWeekend ? "weekend" : ""}`;
+        cell.className = `day-cell ${isWeekend ? "weekend" : ""} ${isToday ? "today" : ""}`;
 
         let buttonsHtml = "";
         if (dayEvents && dayEvents.length > 0) {
@@ -643,7 +690,10 @@
         }
 
         cell.innerHTML = `
-          <div class="day-header"><span class="day-num">${day}</span></div>
+          <div class="day-header">
+            <span class="day-num">${day}</span>
+            ${isToday ? '<span class="today-tag">сегодня</span>' : ''}
+          </div>
           ${buttonsHtml}
         `;
 
@@ -686,6 +736,26 @@
       return map[monthName] || monthName;
     }
 
+    function createGoogleCalendarLink(mIndex, day, ev) {
+      const month = mIndex === 0 ? "08" : "09"; // 08 = Август, 09 = Сентябрь
+      const dayStr = String(day).padStart(2, "0");
+      
+      const [startHour, startMin] = ev.time.split(":").map(Number);
+      const startIso = `2026${month}${dayStr}T${String(startHour).padStart(2, "0")}${String(startMin).padStart(2, "0")}00`;
+      
+      // Длительность 2 часа
+      const endHour = startHour + 2;
+      const endDay = endHour >= 24 ? String(day + 1).padStart(2, "0") : dayStr;
+      const endHourStr = String(endHour % 24).padStart(2, "0");
+      const endIso = `2026${month}${endDay}T${endHourStr}${String(startMin).padStart(2, "0")}00`;
+
+      const title = encodeURIComponent(ev.title);
+      const details = encodeURIComponent(`Стоимость: ${ev.price}\n\nДосуговый центр «Пятница»`);
+      const location = encodeURIComponent("Досуговый центр Пятница, Краснодар");
+
+      return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startIso}/${endIso}&details=${details}&location=${location}`;
+    }
+
     function openModal(mIndex, day) {
       const monthData = monthsData[mIndex];
       const events = monthData.events[day];
@@ -693,14 +763,11 @@
       const title = document.getElementById("modalTitle");
       const content = document.getElementById("modalContent");
 
-      const monthNum = mIndex === 0 ? 7 : 8; // Август (7) / Сентябрь (8) в JS Date
+      const monthNum = mIndex === 0 ? 7 : 8;
       const dateObj = new Date(2026, monthNum, day);
       const dayName = weekDaysNames[dateObj.getDay()];
-      
-      // Используем родительный падеж для месяца
-      const monthGenitive = getMonthInGenitive(monthData.name);
 
-      title.innerHTML = `<span>✦</span> ${day} ${monthGenitive}, ${dayName}`;
+      title.innerHTML = `<span>✦</span> ${day} ${monthData.name.toLowerCase()}, ${dayName}`;
 
       content.innerHTML = events.map(ev => {
         let bookingHtml = "";
@@ -715,6 +782,8 @@
           ? `<a href="${ev.link}" target="_blank">${ev.title}</a>`
           : ev.title;
 
+        const gCalLink = createGoogleCalendarLink(mIndex, day, ev);
+
         return `
           <div class="event-card type-${ev.type}">
             <div class="event-top">
@@ -723,6 +792,9 @@
             </div>
             <div class="event-name">${titleHtml}</div>
             ${bookingHtml}
+            <div class="event-action" style="margin-top: 6px;">
+              <a href="${gCalLink}" target="_blank" class="gcal-btn">📅 Добавить в календарь</a>
+            </div>
           </div>
         `;
       }).join("");
