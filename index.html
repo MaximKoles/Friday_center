@@ -71,6 +71,15 @@
       letter-spacing: 0.04em;
       text-transform: uppercase;
       margin-bottom: 8px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .brand-tag:hover {
+      background: rgba(229, 184, 59, 0.2);
+    }
+    .brand-tag:active {
+      transform: scale(0.96);
     }
 
     .month-nav-header {
@@ -461,7 +470,7 @@
 
   <div class="container">
     <header>
-      <div class="brand-tag">Досуговый центр «Пятница»</div>
+      <a href="https://t.me/friday_center" target="_blank" class="brand-tag">Досуговый центр «Пятница»</a>
       
       <div class="month-nav-header">
         <button class="nav-btn" id="prevBtn" onclick="switchMonth(-1)">‹</button>
@@ -658,6 +667,25 @@
       }
     }
 
+    // Функция для правильного склонения месяца в родительном падеже
+    function getMonthInGenitive(monthName) {
+      const map = {
+        "Январь": "января",
+        "Февраль": "февраля",
+        "Март": "марта",
+        "Апрель": "апреля",
+        "Май": "мая",
+        "Июнь": "июня",
+        "Июль": "июля",
+        "Август": "августа",
+        "Сентябрь": "сентября",
+        "Октябрь": "октября",
+        "Ноябрь": "ноября",
+        "Декабрь": "декабря"
+      };
+      return map[monthName] || monthName;
+    }
+
     function openModal(mIndex, day) {
       const monthData = monthsData[mIndex];
       const events = monthData.events[day];
@@ -668,8 +696,11 @@
       const monthNum = mIndex === 0 ? 7 : 8; // Август (7) / Сентябрь (8) в JS Date
       const dateObj = new Date(2026, monthNum, day);
       const dayName = weekDaysNames[dateObj.getDay()];
+      
+      // Используем родительный падеж для месяца
+      const monthGenitive = getMonthInGenitive(monthData.name);
 
-      title.innerHTML = `<span>✦</span> ${day} ${monthData.name.toLowerCase()}, ${dayName}`;
+      title.innerHTML = `<span>✦</span> ${day} ${monthGenitive}, ${dayName}`;
 
       content.innerHTML = events.map(ev => {
         let bookingHtml = "";
