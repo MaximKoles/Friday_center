@@ -8,501 +8,126 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    /* Все стили без изменений (опущены для краткости, в финальном коде они есть) */
     :root {
       --bg-dark: #121b24;
       --bg-card: #182330;
       --bg-cell: #1d2c3c;
       --bg-cell-empty: #15202b;
       --border: #293d52;
-      --border-light: rgba(229, 184, 59, 0.25);
-      
-      /* Фирменные цвета категорий */
-      --cat-lecture: #e5b83b;       /* Желтый — Лекции и МК */
-      --cat-club: #9e3f35;          /* Терракотовый — Клубы и встречи */
-      --cat-other: #789242;         /* Зеленый — Игры, шоу, квартирники */
-
+      --cat-lecture: #e5b83b;
+      --cat-club: #9e3f35;
+      --cat-other: #789242;
       --cat-lecture-text: #121b24;
       --cat-club-text: #f5eedc;
       --cat-other-text: #f5eedc;
-
       --text-main: #f5eedc;
       --text-muted: #8da2b5;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 16px 10px 32px;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 520px;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 12px;
-    }
-
-    .brand-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(229, 184, 59, 0.12);
-      color: var(--cat-lecture);
-      border: 1px solid rgba(229, 184, 59, 0.28);
-      padding: 4px 12px;
-      border-radius: 30px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-      text-decoration: none;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .brand-tag:hover {
-      background: rgba(229, 184, 59, 0.2);
-    }
-    .brand-tag:active {
-      transform: scale(0.96);
-    }
-
-    .month-nav-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 8px;
-      margin-bottom: 4px;
-    }
-
-    .nav-btn {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      color: var(--text-main);
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      font-size: 1.4rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.15s ease;
-    }
-
-    .nav-btn:active {
-      transform: scale(0.92);
-      background: var(--border);
-    }
-
-    .nav-btn.disabled {
-      opacity: 0.25;
-      cursor: not-allowed;
-      pointer-events: none;
-    }
-
-    h1 {
-      font-size: 1.6rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: var(--text-main);
-      text-transform: capitalize;
-    }
-
-    /* Памятка по цветам */
-    .legend-bar {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin: 8px 0 14px;
-      padding: 6px 12px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-    }
-
-    .legend-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--text-muted);
-    }
-
-    .legend-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body { font-family: 'Inter', sans-serif; background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 16px 10px 32px; }
+    .container { width: 100%; max-width: 520px; }
+    header { text-align: center; margin-bottom: 12px; }
+    .brand-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(229, 184, 59, 0.12); color: var(--cat-lecture); border: 1px solid rgba(229, 184, 59, 0.28); padding: 4px 12px; border-radius: 30px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 8px; text-decoration: none; cursor: pointer; transition: background 0.2s; }
+    .brand-tag:hover { background: rgba(229, 184, 59, 0.2); }
+    .brand-tag:active { transform: scale(0.96); }
+    .month-nav-header { display: flex; align-items: center; justify-content: space-between; padding: 0 8px; margin-bottom: 4px; }
+    .nav-btn { background: var(--bg-card); border: 1px solid var(--border); color: var(--text-main); width: 38px; height: 38px; border-radius: 10px; font-size: 1.4rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s ease; }
+    .nav-btn:active { transform: scale(0.92); background: var(--border); }
+    .nav-btn.disabled { opacity: 0.25; cursor: not-allowed; pointer-events: none; }
+    h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text-main); text-transform: capitalize; }
+    .view-toggle { display: flex; gap: 4px; background: var(--bg-dark); border-radius: 10px; padding: 3px; margin: 0 auto 8px; width: fit-content; border: 1px solid var(--border); }
+    .view-btn { background: transparent; border: none; color: var(--text-muted); padding: 4px 14px; border-radius: 7px; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
+    .view-btn.active { background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); }
+    .view-btn:active { transform: scale(0.95); }
+    .legend-bar { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 8px 0 14px; padding: 6px 12px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; }
+    .legend-item { display: inline-flex; align-items: center; gap: 5px; font-size: 0.72rem; font-weight: 600; color: var(--text-muted); }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
     .legend-dot.lecture { background-color: var(--cat-lecture); }
     .legend-dot.club { background-color: var(--cat-club); }
     .legend-dot.other { background-color: var(--cat-other); }
+    .calendar-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 10px 8px 12px; }
+    .weekdays-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 6px; text-align: center; }
+    .weekday { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); padding: 4px 0; text-transform: uppercase; }
+    .weekday.weekend { color: #e57368; }
+    .days-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    .day-cell { background-color: var(--bg-cell); border: 1px solid var(--border); border-radius: 8px; min-height: 62px; padding: 4px 2px 3px; display: flex; flex-direction: column; position: relative; }
+    .day-cell.other-month { background-color: var(--bg-cell-empty); border-color: rgba(41, 61, 82, 0.35); opacity: 0.25; }
+    .day-header { display: flex; justify-content: flex-start; padding: 0 3px 2px; }
+    .day-num { font-size: 0.8rem; font-weight: 700; color: var(--text-main); line-height: 1; }
+    .day-cell.weekend .day-num { color: #e57368; }
+    .events-list { display: flex; flex-direction: column; gap: 3px; flex-grow: 1; }
+    .time-btn { display: block; border: none; cursor: pointer; font-size: 0.68rem; font-weight: 800; padding: 3px 1px; border-radius: 5px; text-align: center; line-height: 1.15; letter-spacing: -0.02em; transition: transform 0.1s ease, filter 0.1s ease; width: 100%; }
+    .time-btn.type-lecture { background-color: var(--cat-lecture); color: var(--cat-lecture-text); }
+    .time-btn.type-club { background-color: var(--cat-club); color: var(--cat-club-text); }
+    .time-btn.type-other { background-color: var(--cat-other); color: var(--cat-other-text); }
+    .time-btn:active { transform: scale(0.93); filter: brightness(0.9); }
 
-    .calendar-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 10px 8px 12px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
-    }
+    /* Список */
+    .list-view { display: none; flex-direction: column; gap: 12px; }
+    .list-view.active { display: flex; }
+    .calendar-view { display: block; }
+    .calendar-view.hidden { display: none; }
+    .list-day-group { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 8px; }
+    .list-day-group:last-child { margin-bottom: 0; }
+    .list-day-header { background: var(--bg-dark); padding: 10px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+    .list-day-number { font-size: 1.5rem; font-weight: 800; color: var(--cat-lecture); line-height: 1; min-width: 48px; }
+    .list-day-info { display: flex; flex-direction: column; gap: 1px; margin-left: 10px; }
+    .list-day-month { font-size: 0.9rem; color: var(--text-muted); }
+    .list-day-weekday { font-size: 0.8rem; font-weight: 600; color: var(--text-main); }
+    .list-day-divider { flex: 1; height: 1px; background: var(--border); opacity: 0.3; }
+    .list-event-item { padding: 10px 14px; border-bottom: 1px solid rgba(41, 61, 82, 0.2); display: flex; align-items: flex-start; gap: 10px; }
+    .list-event-item:last-child { border-bottom: none; }
+    .list-event-time { font-weight: 800; font-size: 0.7rem; min-width: 40px; color: var(--text-muted); padding-top: 1px; }
+    .list-event-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+    .list-event-dot.type-lecture { background: var(--cat-lecture); }
+    .list-event-dot.type-club { background: var(--cat-club); }
+    .list-event-dot.type-other { background: var(--cat-other); }
+    .list-event-info { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+    .list-event-title { font-size: 0.9rem; font-weight: 600; color: var(--text-main); line-height: 1.3; }
+    .list-event-title a { color: var(--text-main); text-decoration: underline; text-decoration-color: rgba(245, 238, 220, 0.3); }
+    .list-event-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; }
+    .list-event-price { }
+    .list-event-booking { color: var(--text-muted); display: inline-flex; align-items: center; gap: 5px; background: rgba(141, 162, 181, 0.08); border: 1px solid rgba(141, 162, 181, 0.2); color: var(--text-muted) !important; font-size: 0.7rem; font-weight: 500; padding: 2px 8px; border-radius: 4px; text-decoration: none !important; transition: all 0.15s ease; margin-top: 4px; margin-bottom: 4px; }
+    .list-event-booking a { color: var(--cat-lecture); text-decoration: none; font-weight: 600; }
+    .list-today-badge { background: var(--cat-lecture); color: var(--cat-lecture-text); font-size: 0.55rem; font-weight: 700; padding: 1px 8px; border-radius: 4px; text-transform: uppercase; margin-left: 4px; }
+    .list-empty { padding: 30px 16px; text-align: center; color: var(--text-muted); font-size: 0.9rem; }
 
-    .weekdays-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
-      margin-bottom: 6px;
-      text-align: center;
-    }
+    .footer-bar { margin-top: 14px; padding: 12px 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; text-align: center; font-size: 0.82rem; color: var(--text-muted); line-height: 1.4; }
+    .footer-bar a { color: var(--cat-lecture); font-weight: 700; text-decoration: none; }
+    .creator-credits { margin-top: 30px; text-align: center; font-size: 0.75rem; color: var(--text-dim, #5c7287); }
+    .creator-credits a { color: var(--text-muted, #8da2b5); text-decoration: none; font-weight: 600; transition: color 0.15s ease; }
+    .creator-credits a:hover, .creator-credits a:active { color: var(--cat-lecture, #e5b83b); text-decoration: underline; }
+    .gcal-btn { display: inline-flex; align-items: center; gap: 5px; background: rgba(141, 162, 181, 0.08); border: 1px solid rgba(141, 162, 181, 0.2); color: var(--text-muted) !important; font-size: 0.7rem; font-weight: 500; padding: 2px 8px; border-radius: 4px; text-decoration: none !important; transition: all 0.15s ease; }
+    .gcal-btn:active { background: rgba(141, 162, 181, 0.18); color: var(--text-main) !important; transform: scale(0.97); }
+    .day-cell.today { border: 1.5px solid var(--cat-lecture); background: rgba(229, 184, 59, 0.08); box-shadow: 0 0 10px rgba(229, 184, 59, 0.15); }
+    .day-cell.today .day-num { color: var(--cat-lecture); }
 
-    .weekday {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      padding: 4px 0;
-      text-transform: uppercase;
-    }
-
-    .weekday.weekend {
-      color: #e57368;
-    }
-
-    .days-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
-    }
-
-    .day-cell {
-      background-color: var(--bg-cell);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      min-height: 62px;
-      padding: 4px 2px 3px;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-    }
-
-    .day-cell.other-month {
-      background-color: var(--bg-cell-empty);
-      border-color: rgba(41, 61, 82, 0.35);
-      opacity: 0.25;
-    }
-
-    .day-header {
-      display: flex;
-      justify-content: flex-start;
-      padding: 0 3px 2px;
-    }
-
-    .day-num {
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--text-main);
-      line-height: 1;
-    }
-
-    .day-cell.weekend .day-num {
-      color: #e57368;
-    }
-
-    .events-list {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-      flex-grow: 1;
-    }
-
-    .time-btn {
-      display: block;
-      border: none;
-      cursor: pointer;
-      font-size: 0.68rem;
-      font-weight: 800;
-      padding: 3px 1px;
-      border-radius: 5px;
-      text-align: center;
-      line-height: 1.15;
-      letter-spacing: -0.02em;
-      transition: transform 0.1s ease, filter 0.1s ease;
-      width: 100%;
-    }
-
-    .time-btn.type-lecture {
-      background-color: var(--cat-lecture);
-      color: var(--cat-lecture-text);
-    }
-
-    .time-btn.type-club {
-      background-color: var(--cat-club);
-      color: var(--cat-club-text);
-    }
-
-    .time-btn.type-other {
-      background-color: var(--cat-other);
-      color: var(--cat-other-text);
-    }
-
-    .time-btn:active {
-      transform: scale(0.93);
-      filter: brightness(0.9);
-    }
-
-    /* Модальное окно */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(10, 16, 22, 0.82);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.18s ease, visibility 0.18s ease;
-      z-index: 1000;
-    }
-
-    .modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .modal-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      width: 100%;
-      max-width: 420px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
-      overflow: hidden;
-      animation: popModal 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.25);
-    }
-
-    @keyframes popModal {
-      from { transform: scale(0.92); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-
-    .modal-header {
-      padding: 14px 16px;
-      background: #111a24;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .modal-title {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .modal-title span {
-      color: var(--cat-lecture);
-    }
-
-    .close-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 1.4rem;
-      cursor: pointer;
-      line-height: 1;
-      padding: 4px 6px;
-      border-radius: 6px;
-    }
-
-    .close-btn:active {
-      color: var(--cat-lecture);
-    }
-
-    .modal-body {
-      padding: 14px;
-      max-height: 65vh;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .event-card {
-      background: #111b26;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
+    /* Модальное окно (только для календаря) */
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(10, 16, 22, 0.82); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; padding: 16px; opacity: 0; visibility: hidden; transition: opacity 0.18s ease, visibility 0.18s ease; z-index: 1000; }
+    .modal-overlay.active { opacity: 1; visibility: visible; }
+    .modal-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 420px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7); overflow: hidden; animation: popModal 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.25); }
+    @keyframes popModal { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .modal-header { padding: 14px 16px; background: #111a24; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .modal-title { font-size: 1rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 6px; }
+    .modal-title span { color: var(--cat-lecture); }
+    .close-btn { background: transparent; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer; line-height: 1; padding: 4px 6px; border-radius: 6px; }
+    .close-btn:active { color: var(--cat-lecture); }
+    .modal-body { padding: 14px; max-height: 65vh; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+    .event-card { background: #111b26; border: 1px solid var(--border); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
     .event-card.type-lecture { border-left: 3px solid var(--cat-lecture); }
     .event-card.type-club { border-left: 3px solid var(--cat-club); }
     .event-card.type-other { border-left: 3px solid var(--cat-other); }
-
-    .event-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .event-time-badge {
-      font-weight: 800;
-      font-size: 0.75rem;
-      padding: 2px 7px;
-      border-radius: 4px;
-      letter-spacing: -0.01em;
-    }
-
-    .event-card.type-lecture .event-time-badge {
-      background: var(--cat-lecture);
-      color: var(--cat-lecture-text);
-    }
-
-    .event-card.type-club .event-time-badge {
-      background: var(--cat-club);
-      color: var(--cat-club-text);
-    }
-
-    .event-card.type-other .event-time-badge {
-      background: var(--cat-other);
-      color: var(--cat-other-text);
-    }
-
-    .event-cost {
-      font-weight: 700;
-      font-size: 0.85rem;
-      color: var(--cat-lecture);
-    }
-
-    .event-name {
-      font-size: 0.9rem;
-      font-weight: 600;
-      line-height: 1.35;
-      color: var(--text-main);
-    }
-
-    .event-name a {
-      color: var(--text-main);
-      text-decoration: underline;
-      text-decoration-color: rgba(245, 238, 220, 0.4);
-    }
-
-    .event-action {
-      margin-top: 2px;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-
-    .event-action a {
-      color: var(--cat-lecture);
-      text-decoration: none;
-      font-weight: 700;
-    }
-
-    .footer-bar {
-      margin-top: 14px;
-      padding: 12px 14px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      text-align: center;
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      line-height: 1.4;
-    }
-
-    .footer-bar a {
-      color: var(--cat-lecture);
-      font-weight: 700;
-      text-decoration: none;
-    }
-    .creator-credits {
-      margin-top: 30px;
-      text-align: center;
-      font-size: 0.75rem;
-      color: var(--text-dim, #5c7287);
-    }
-
-    .creator-credits a {
-      color: var(--text-muted, #8da2b5);
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.15s ease;
-    }
-
-    .creator-credits a:hover,
-    .creator-credits a:active {
-      color: var(--cat-lecture, #e5b83b);
-      text-decoration: underline;
-    }
-    .gcal-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: rgba(141, 162, 181, 0.08);
-      border: 1px solid rgba(141, 162, 181, 0.2);
-      color: var(--text-muted) !important;
-      font-size: 0.72rem;
-      font-weight: 500;
-      padding: 4px 9px;
-      border-radius: 6px;
-      text-decoration: none !important;
-      transition: all 0.15s ease;
-    }
-
-    .gcal-btn:active {
-      background: rgba(141, 162, 181, 0.18);
-      color: var(--text-main) !important;
-      transform: scale(0.97);
-    }
-    /* Подсветка текущего дня */
-    .day-cell.today {
-      border: 1.5px solid var(--cat-lecture);
-      background: rgba(229, 184, 59, 0.08);
-      box-shadow: 0 0 10px rgba(229, 184, 59, 0.15);
-    }
-
-    .day-cell.today .day-num {
-      color: var(--cat-lecture);
-    }
-
-    .today-tag {
-      font-size: 0.58rem;
-      font-weight: 700;
-      color: var(--cat-lecture);
-      text-transform: uppercase;
-      margin-left: auto;
-      letter-spacing: 0.02em;
-    }
+    .event-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .event-time-badge { font-weight: 800; font-size: 0.75rem; padding: 2px 7px; border-radius: 4px; letter-spacing: -0.01em; }
+    .event-card.type-lecture .event-time-badge { background: var(--cat-lecture); color: var(--cat-lecture-text); }
+    .event-card.type-club .event-time-badge { background: var(--cat-club); color: var(--cat-club-text); }
+    .event-card.type-other .event-time-badge { background: var(--cat-other); color: var(--cat-other-text); }
+    .event-cost { font-weight: 700; font-size: 0.85rem; color: var(--cat-lecture); }
+    .event-name { font-size: 0.9rem; font-weight: 600; line-height: 1.35; color: var(--text-main); }
+    .event-name a { color: var(--text-main); text-decoration: underline; text-decoration-color: rgba(245, 238, 220, 0.4); }
+    .event-action { margin-top: 2px; font-size: 0.8rem; color: var(--text-muted); }
+    .event-action a { color: var(--cat-lecture); text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; background: rgba(141, 162, 181, 0.08); border: 1px solid rgba(141, 162, 181, 0.2); font-size: 0.7rem; padding: 2px 8px; border-radius: 4px; transition: all 0.15s ease; margin-top: 4px; margin-bottom: 4px; margin-right: 3px;}
   </style>
 </head>
 <body>
@@ -510,15 +135,17 @@
   <div class="container">
     <header>
       <a href="https://t.me/friday_center" target="_blank" class="brand-tag">Досуговый центр «Пятница»</a>
-      
       <div class="month-nav-header">
         <button class="nav-btn" id="prevBtn" onclick="switchMonth(-1)">‹</button>
         <h1 id="monthTitle">Сентябрь</h1>
         <button class="nav-btn" id="nextBtn" onclick="switchMonth(1)">›</button>
       </div>
+      <div class="view-toggle">
+        <button class="view-btn active" id="viewCalendar" onclick="switchView('calendar')">Календарь</button>
+        <button class="view-btn" id="viewList" onclick="switchView('list')">Список</button>
+      </div>
     </header>
 
-    <!-- Памятка по категориям событий -->
     <div class="legend-bar">
       <div class="legend-item"><span class="legend-dot lecture"></span> Лекции и МК</div>
       <div class="legend-item"><span class="legend-dot club"></span> Клубы и встречи</div>
@@ -526,18 +153,17 @@
     </div>
 
     <div class="calendar-card">
-      <div class="weekdays-grid">
-        <div class="weekday">Пн</div>
-        <div class="weekday">Вт</div>
-        <div class="weekday">Ср</div>
-        <div class="weekday">Чт</div>
-        <div class="weekday">Пт</div>
-        <div class="weekday weekend">Сб</div>
-        <div class="weekday weekend">Вс</div>
+      <div class="calendar-view" id="calendarView">
+        <div class="weekdays-grid">
+          <div class="weekday">Пн</div><div class="weekday">Вт</div><div class="weekday">Ср</div>
+          <div class="weekday">Чт</div><div class="weekday">Пт</div>
+          <div class="weekday weekend">Сб</div><div class="weekday weekend">Вс</div>
+        </div>
+        <div class="days-grid" id="calendarGrid"></div>
       </div>
 
-      <div class="days-grid" id="calendarGrid">
-        <!-- Генерируется через JS -->
+      <div class="list-view" id="listView">
+        <div id="listContent"></div>
       </div>
     </div>
 
@@ -549,7 +175,7 @@
     </div>
   </div>
 
-  <!-- Модальное окно с подробностями -->
+  <!-- Модальное окно -->
   <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
     <div class="modal-card" onclick="event.stopPropagation()">
       <div class="modal-header">
@@ -561,276 +187,417 @@
   </div>
 
   <script>
-    const monthsData = [
-      {
-        name: "Август",
-        totalDays: 31,
-        firstDayOffset: 5, // 1 августа 2026 — Суббота (индекс 5 при Пн=0)
-        events: {
-          1: [{ time: "12:00", title: "Интерактивный кукольный спектакль", link: "https://t.me/friday_center/4813", price: "800 ₽ за ребенка", type: "other" }],
-          3: [{ time: "19:00", title: "Клуб любителей сериалов", link: "https://t.me/friday_center/4764", price: "От 400 ₽", type: "club" }],
-          4: [{ time: "19:00", title: "Благотворительный английский клуб с Элиной", link: "https://t.me/friday_center/4835", price: "Донат в Краснодог", type: "club" }],
-          5: [{ time: "19:00", title: "Мастер-класс от Леры Гуль по монтажу видео в CapCut", link: "https://t.me/friday_center/4853", price: "1500 ₽", type: "lecture" }],
-          6: [{ time: "19:00", title: "Арт встреча с Татьяной Чановой о Валентине Серове", link: "https://t.me/friday_center/4816", price: "1200 ₽", type: "club" }],
-          7: [{ time: "19:00", title: "Играем в спортивную мафию", link: "https://t.me/friday_center/4847", price: "От 400 ₽", type: "other" }],
-          8: [{ time: "12:00", title: "Воркшоп «Спокойно. Это собеседование»", link: "https://t.me/friday_center/4844", price: "1400 ₽", type: "lecture" }],
-          10: [{ time: "19:00", title: "Клуб путешественников «Винодельни Кубани»", link: "https://t.me/friday_center/4875", price: "800 ₽", booking: "@olgagidkrd", type: "club" }],
-          11: [
-            { time: "15:00", title: "Зрелые встречи | играем в игры на сближение", link: "https://t.me/friday_center/4904", price: "Орг. взнос 500 ₽", type: "club" },
-            { time: "19:00", title: "Хобби час | учимся играть на гитаре", link: "https://t.me/friday_center/4910", price: "От 400 ₽", type: "club" }
-          ],
-          12: [{ time: "19:00", title: "Лекция от архитектора Евгении Княжевой «Куда и зачем растет Краснодар»", link: "https://t.me/friday_center/4862", price: "700 ₽", type: "lecture" }],
-          13: [{ time: "19:00", title: "Драмеди шоу", link: "https://t.me/friday_center/4825", price: "1100 ₽ (в июле 1000 ₽)", type: "other" }],
-          14: [{ time: "15:00", title: "Спортивный покер", link: "https://t.me/friday_center/4902", price: "600 ₽", type: "other" }],
-          15: [{ time: "12:00", title: "Книжный клуб «Культурный код/т»", link: "https://t.me/friday_center/4913", price: "700 ₽", booking: "@NansyKanva", type: "club" }],
-          17: [{ time: "19:00", title: "Квартирник для новичков", link: "https://t.me/friday_center/4955", price: "600 ₽", type: "other" }],
-          18: [{ time: "18:30", title: "Киноклуб «Не проецируй!» Смотрим «Что-то не так с Кевином»", link: "https://t.me/friday_center/4938", price: "600 ₽", type: "club" }],
-          19: [{ time: "19:00", title: "Трансформационная игра «Выбор»", link: "https://t.me/friday_center/4916", price: "1500 ₽", type: "other" }],
-          20: [{ time: "19:00", title: "Клуб диванных анимэ критиков", link: "https://t.me/friday_center/4851", price: "700 ₽", booking: "@wise_phylosopher", type: "club" }],
-          23: [{ time: "12:00", title: "Death cafe / смерть кафе", price: "Оплата по желанию", booking: "@Pro_thanatos", type: "other" }],
-          24: [{ time: "18:00", title: "Дискуссионный клуб «Разговоры о». Тема: страх", link: "https://t.me/friday_center/4941", price: "900 ₽", type: "club" }],
-          25: [
-            { time: "15:00", title: "Хобби часы | Цианотипия на ткани с Кристиной Файбер", link: "https://t.me/friday_center/4953", price: "От 400 ₽", type: "club" },
-            { time: "18:30", title: "Зрелые встречи 55+ | творческий вечер, провожаем лето", link: "https://t.me/friday_center/4904", price: "Орг. взнос 500 ₽", type: "club" }
-          ],
-          26: [
-            { time: "15:00", title: "Спортивный покер", link: "https://t.me/friday_center/4902", price: "600 ₽", type: "other" },
-            { time: "19:00", title: "Концерт-беседа от SoulSounds «Августовские диалоги: эхо уходящего лета» (Флейта, виолончель, гитара)", link: "https://t.me/friday_center/4911", price: "1000 ₽", type: "other" }
-          ],
-          27: [{ time: "19:00", title: "Квартирник", price: "600 ₽", type: "other" }],
-          28: [{ time: "19:00", title: "Бал смыслов", link: "https://t.me/friday_center/4895", price: "1000 ₽", type: "other" }]
+    (function() {
+      "use strict";
+
+      // ==================== ДАННЫЕ ====================
+      const monthsData = [
+        {
+          name: "Август",
+          year: 2026,
+          monthIndex: 7,
+          totalDays: 31,
+          events: {
+            1: [{ time: "12:00", title: "Интерактивный кукольный спектакль", link: "https://t.me/friday_center/4813", price: "800 ₽ за ребенка", type: "other" }],
+            3: [{ time: "19:00", title: "Клуб любителей сериалов", link: "https://t.me/friday_center/4764", price: "От 400 ₽", type: "club" }],
+            4: [{ time: "19:00", title: "Благотворительный английский клуб с Элиной", link: "https://t.me/friday_center/4835", price: "Донат в Краснодог", type: "club" }],
+            5: [{ time: "19:00", title: "Мастер-класс от Леры Гуль по монтажу видео в CapCut", link: "https://t.me/friday_center/4853", price: "1500 ₽", type: "lecture" }],
+            6: [{ time: "19:00", title: "Арт встреча с Татьяной Чановой о Валентине Серове", link: "https://t.me/friday_center/4816", price: "1200 ₽", type: "club" }],
+            7: [{ time: "19:00", title: "Играем в спортивную мафию", link: "https://t.me/friday_center/4847", price: "От 400 ₽", type: "other" }],
+            8: [{ time: "12:00", title: "Воркшоп «Спокойно. Это собеседование»", link: "https://t.me/friday_center/4844", price: "1400 ₽", type: "lecture" }],
+            10: [{ time: "19:00", title: "Клуб путешественников «Винодельни Кубани»", link: "https://t.me/friday_center/4875", price: "800 ₽", booking: "@olgagidkrd", type: "club" }],
+            11: [
+              { time: "15:00", title: "Зрелые встречи | играем в игры на сближение", link: "https://t.me/friday_center/4904", price: "Орг. взнос 500 ₽", type: "club" },
+              { time: "19:00", title: "Хобби час | учимся играть на гитаре", link: "https://t.me/friday_center/4910", price: "От 400 ₽", type: "club" }
+            ],
+            12: [{ time: "19:00", title: "Лекция от архитектора Евгении Княжевой «Куда и зачем растет Краснодар»", link: "https://t.me/friday_center/4862", price: "700 ₽", type: "lecture" }],
+            13: [{ time: "19:00", title: "Драмеди шоу", link: "https://t.me/friday_center/4825", price: "1100 ₽ (в июле 1000 ₽)", type: "other" }],
+            14: [{ time: "15:00", title: "Спортивный покер", link: "https://t.me/friday_center/4902", price: "600 ₽", type: "other" }],
+            15: [{ time: "12:00", title: "Книжный клуб «Культурный код/т»", link: "https://t.me/friday_center/4913", price: "700 ₽", booking: "@NansyKanva", type: "club" }],
+            17: [{ time: "19:00", title: "Квартирник для новичков", link: "https://t.me/friday_center/4955", price: "600 ₽", type: "other" }],
+            18: [{ time: "18:30", title: "Киноклуб «Не проецируй!» Смотрим «Что-то не так с Кевином»", link: "https://t.me/friday_center/4938", price: "600 ₽", type: "club" }],
+            19: [{ time: "19:00", title: "Трансформационная игра «Выбор»", link: "https://t.me/friday_center/4916", price: "1500 ₽", type: "other" }],
+            20: [{ time: "19:00", title: "Клуб диванных анимэ критиков", link: "https://t.me/friday_center/4851", price: "700 ₽", booking: "@wise_phylosopher", type: "club" }],
+            23: [{ time: "12:00", title: "Death cafe / смерть кафе", price: "Оплата по желанию", booking: "@Pro_thanatos", type: "other" }],
+            24: [{ time: "18:00", title: "Дискуссионный клуб «Разговоры о». Тема: страх", link: "https://t.me/friday_center/4941", price: "900 ₽", type: "club" }],
+            25: [
+              { time: "15:00", title: "Хобби часы | Цианотипия на ткани с Кристиной Файбер", link: "https://t.me/friday_center/4953", price: "От 400 ₽", type: "club" },
+              { time: "18:30", title: "Зрелые встречи 55+ | творческий вечер, провожаем лето", link: "https://t.me/friday_center/4904", price: "Орг. взнос 500 ₽", type: "club" }
+            ],
+            26: [
+              { time: "15:00", title: "Спортивный покер", link: "https://t.me/friday_center/4902", price: "600 ₽", type: "other" },
+              { time: "19:00", title: "Концерт-беседа от SoulSounds «Августовские диалоги: эхо уходящего лета» (Флейта, виолончель, гитара)", link: "https://t.me/friday_center/4911", price: "1000 ₽", type: "other" }
+            ],
+            27: [{ time: "19:00", title: "Квартирник", price: "600 ₽", type: "other" }],
+            28: [{ time: "19:00", title: "Бал смыслов", link: "https://t.me/friday_center/4895", price: "1000 ₽", type: "other" }]
+          }
+        },
+        {
+          name: "Сентябрь",
+          year: 2026,
+          monthIndex: 8,
+          totalDays: 30,
+          events: {
+            1: [{ time: "19:00", title: "Как сделать красивую презентацию чего угодно", link: "https://t.me/friday_center/4993", price: "900 ₽", type: "lecture" }],
+            3: [{ time: "19:00", title: "Спортивная мафия", link: "https://t.me/friday_center/4997", price: "600 ₽", type: "other" }],
+            6: [
+              { time: "12:00", title: "Кукольный спектакль для детей до 10 лет «Три поросенка»", link: "https://t.me/friday_center/4992", price: "800 ₽", type: "other" },
+              { time: "17:00", title: "Киноистория «Коко Шанель. Женщина, изменившая моду»", link: "https://t.me/friday_center/4994", price: "1500 ₽", type: "lecture" }
+            ],
+            7: [{ time: "19:00", title: "Клуб любителей сериалов", link: "https://t.me/friday_center/4908", price: "От 400 ₽", type: "club" }],
+            8: [
+              { time: "15:00", title: "Зрелые встречи 55+ | Фото прогулка по Красной с Марией Абубакировой", price: "Орг. взнос 500 ₽", type: "club" },
+              { time: "19:00", title: "Хобби часы | укулеле для начинающих с Ланой Эннс", price: "От 400 ₽", type: "club" }
+            ],
+            9: [{ time: "19:00", title: "Домашний покер", price: "600 ₽", type: "other" }],
+            10: [{ time: "19:00", title: "Лекция от нейробиолога Вероники Малахиевой «Норадреналин и Голубое пятно: механизм страха и фокуса»", price: "700 ₽", type: "lecture" }],
+            12: [{ time: "12:00", title: "Встреча книжного клуба «Культурный код/т»", price: "700 ₽", booking: "@NansyKanva", type: "club" }],
+            14: [{ time: "19:00", title: "Иностранный квартирник", price: "600 ₽", type: "other" }],
+            16: [{ time: "19:00", title: "Арт встреча с Татьяной Чановой «Репин»", price: "1200 ₽", type: "club" }],
+            17: [{ time: "19:00", title: "Клуб диванных аниме критиков", price: "700 ₽", booking: "@wise_phylosopher", type: "club" }],
+            20: [{ time: "12:00", title: "Death cafe | смерть кафе", price: "Донат по желанию", booking: "@Pro_thanatos", type: "other" }],
+            21: [{ time: "19:00", title: "Клуб путешественников", price: "800 ₽", booking: "@olgagidkrd", type: "club" }],
+            22: [
+              { time: "15:00", title: "Зрелые встречи 55+ | экскурсия «Предприимчивый Екатеринодар: торговые фамилии, магазины и большие дела» с Дарьей Щербаковой", price: "Орг. взнос 500 ₽", type: "club" },
+              { time: "19:00", title: "Хобби клуб укулелистов. Встреча для продолжающих", price: "От 400 ₽", type: "club" }
+            ],
+            23: [{ time: "19:00", title: "Музыкальные истории Сергея Острицова. Брайан Джонс", price: "1000 ₽", type: "lecture" }],
+            24: [{ time: "19:00", title: "Драмеди шоу", price: "1100 ₽", type: "other" }],
+            25: [{ time: "15:00", title: "Домашний покер", price: "600 ₽", type: "other" }],
+            27: [{ time: "14:00", title: "Лекция от проектов «Популярная история» & «Свидание с Краснодаром». «За партой в Российской империи: уроки Екатеринодара»", price: "700 ₽", type: "lecture", links: ["https://t.me/popular_history_krd", "https://t.me/krasnodarwithlove"] }],
+            28: [{ time: "19:00", title: "Квартирник", price: "600 ₽", type: "other" }],
+            29: [{ time: "18:00", title: "Дискуссионный клуб «Разговоры о». Тема: выбор", price: "900 ₽", type: "club" }],
+            30: [{ time: "19:00", title: "Трансформационная игра «Выбор»", price: "1500 ₽", type: "other" }]
+          }
         }
-      },
-      {
-        name: "Сентябрь",
-        totalDays: 30,
-        firstDayOffset: 1, // 1 сентября 2026 — Вторник (индекс 1)
-        events: {
-          1: [{ time: "19:00", title: "Как сделать красивую презентацию чего угодно", link: "https://t.me/friday_center/4993", price: "900 ₽", type: "lecture" }],
-          3: [{ time: "19:00", title: "Спортивная мафия", link: "https://t.me/friday_center/4997", price: "600 ₽", type: "other" }],
-          6: [
-            { time: "12:00", title: "Кукольный спектакль для детей до 10 лет «Три поросенка»", link: "https://t.me/friday_center/4992", price: "800 ₽", type: "other" },
-            { time: "17:00", title: "Киноистория «Коко Шанель. Женщина, изменившая моду»", link: "https://t.me/friday_center/4994", price: "1500 ₽", type: "lecture" }
-          ],
-          7: [{ time: "19:00", title: "Клуб любителей сериалов", link: "https://t.me/friday_center/4908", price: "От 400 ₽", type: "club" }],
-          8: [
-            { time: "15:00", title: "Зрелые встречи 55+ | Фото прогулка по Красной с Марией Абубакировой", price: "Орг. взнос 500 ₽", type: "club" },
-            { time: "19:00", title: "Хобби часы | укулеле для начинающих с Ланой Эннс", price: "От 400 ₽", type: "club" }
-          ],
-          9: [{ time: "19:00", title: "Домашний покер", link: "https://t.me/friday_center/5003", price: "600 ₽", type: "other" }],
-          10: [{ time: "19:00", title: "Лекция от нейробиолога Вероники Малахиевой «Норадреналин и Голубое пятно: механизм страха и фокуса»", price: "700 ₽", type: "lecture" }],
-          12: [{ time: "12:00", title: "Встреча книжного клуба «Культурный код/т»", price: "700 ₽", booking: "@NansyKanva", type: "club" }],
-          14: [{ time: "19:00", title: "Иностранный квартирник", price: "600 ₽", type: "other" }],
-          16: [{ time: "19:00", title: "Арт встреча с Татьяной Чановой «Репин»", price: "1200 ₽", type: "club" }],
-          17: [{ time: "19:00", title: "Клуб диванных аниме критиков", price: "700 ₽", booking: "@wise_phylosopher", type: "club" }],
-          20: [{ time: "12:00", title: "Death cafe | смерть кафе", price: "Донат по желанию", booking: "@Pro_thanatos", type: "other" }],
-          21: [{ time: "19:00", title: "Клуб путешественников", price: "800 ₽", booking: "@olgagidkrd", type: "club" }],
-          22: [
-            { time: "15:00", title: "Зрелые встречи 55+ | экскурсия «Предприимчивый Екатеринодар: торговые фамилии, магазины и большие дела» с Дарьей Щербаковой", price: "Орг. взнос 500 ₽", type: "club" },
-            { time: "19:00", title: "Хобби клуб укулелистов. Встреча для продолжающих", price: "От 400 ₽", type: "club" }
-          ],
-          23: [{ time: "19:00", title: "Музыкальные истории Сергея Острицова. Брайан Джонс", price: "1000 ₽", type: "lecture" }],
-          24: [{ time: "19:00", title: "Драмеди шоу", price: "1100 ₽", type: "other" }],
-          25: [{ time: "15:00", title: "Домашний покер", link: "https://t.me/friday_center/5003", price: "600 ₽", type: "other" }],
-          27: [{ time: "14:00", title: "Лекция от проектов «Популярная история» & «Свидание с Краснодаром». «За партой в Российской империи: уроки Екатеринодара»", price: "700 ₽", type: "lecture", links: ["https://t.me/popular_history_krd", "https://t.me/krasnodarwithlove"] }],
-          28: [{ time: "19:00", title: "Квартирник", price: "600 ₽", type: "other" }],
-          29: [{ time: "18:00", title: "Дискуссионный клуб «Разговоры о». Тема: выбор", price: "900 ₽", type: "club" }],
-          30: [{ time: "19:00", title: "Трансформационная игра «Выбор»", price: "1500 ₽", type: "other" }]
-        }
-      }
-    ];
+      ];
 
-    const weekDaysNames = ["воскресенье", "понедельник", "вторник", "среда", "четверг", "пятница", "суббота"];
-    let currentMonthIndex = 1; // 0 = Август, 1 = Сентябрь
+      // ==================== КОНСТАНТЫ ====================
+      const WEEKDAYS_SHORT = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
+      const MONTH_GENITIVE = { "Август": "августа", "Сентябрь": "сентября" };
 
-    function renderCalendar() {
-      const monthData = monthsData[currentMonthIndex];
-      document.getElementById("monthTitle").textContent = monthData.name;
-      
-      const prevBtn = document.getElementById("prevBtn");
-      const nextBtn = document.getElementById("nextBtn");
-      
-      prevBtn.classList.toggle("disabled", currentMonthIndex === 0);
-      nextBtn.classList.toggle("disabled", currentMonthIndex === monthsData.length - 1);
-
-      const grid = document.getElementById("calendarGrid");
-      grid.innerHTML = "";
-
-      // Пустые ведущие ячейки
-      for (let i = 0; i < monthData.firstDayOffset; i++) {
-        const emptyCell = document.createElement("div");
-        emptyCell.className = "day-cell other-month";
-        grid.appendChild(emptyCell);
-      }
-
-      // Дни месяца
-      const today = new Date();
-      const currentRealMonth = today.getMonth(); // 7 = Август, 8 = Сентябрь
-      const currentRealDate = today.getDate();
-
-      for (let day = 1; day <= monthData.totalDays; day++) {
-        const dayOfWeekIndex = (monthData.firstDayOffset + day - 1) % 7;
-        const isWeekend = dayOfWeekIndex === 5 || dayOfWeekIndex === 6;
-        const dayEvents = monthData.events[day];
-        
-        // Проверка на текущий день (Август = индекс 0, Сентябрь = индекс 1)
-        const targetMonthNum = currentMonthIndex === 0 ? 7 : 8;
-        const isToday = currentRealMonth === targetMonthNum && currentRealDate === day;
-
-        const cell = document.createElement("div");
-        cell.className = `day-cell ${isWeekend ? "weekend" : ""} ${isToday ? "today" : ""}`;
-
-        let buttonsHtml = "";
-        if (dayEvents && dayEvents.length > 0) {
-          buttonsHtml = '<div class="events-list">' +
-            dayEvents.map((ev, idx) => `
-              <button class="time-btn type-${ev.type}" onclick="openModal(${currentMonthIndex}, ${day})">${ev.time}</button>
-            `).join("") +
-            '</div>';
-        }
-
-        cell.innerHTML = `
-          <div class="day-header">
-            <span class="day-num">${day}</span>
-          </div>
-          ${buttonsHtml}
-        `;
-
-        grid.appendChild(cell);
-      }
-
-      // Хвостовые ячейки
-      const trailing = (7 - ((monthData.firstDayOffset + monthData.totalDays) % 7)) % 7;
-      for (let i = 0; i < trailing; i++) {
-        const emptyCell = document.createElement("div");
-        emptyCell.className = "day-cell other-month";
-        grid.appendChild(emptyCell);
-      }
-    }
-
-    function switchMonth(direction) {
-      const newIndex = currentMonthIndex + direction;
-      if (newIndex >= 0 && newIndex < monthsData.length) {
-        currentMonthIndex = newIndex;
-        renderCalendar();
-      }
-    }
-
-    // Функция для правильного склонения месяца в родительном падеже
-    function getMonthInGenitive(monthName) {
-      const map = {
-        "Январь": "января",
-        "Февраль": "февраля",
-        "Март": "марта",
-        "Апрель": "апреля",
-        "Май": "мая",
-        "Июнь": "июня",
-        "Июль": "июля",
-        "Август": "августа",
-        "Сентябрь": "сентября",
-        "Октябрь": "октября",
-        "Ноябрь": "ноября",
-        "Декабрь": "декабря"
+      // ==================== DOM-кеш ====================
+      const el = {
+        monthTitle: document.getElementById('monthTitle'),
+        calendarGrid: document.getElementById('calendarGrid'),
+        listContent: document.getElementById('listContent'),
+        modalOverlay: document.getElementById('modalOverlay'),
+        modalTitle: document.getElementById('modalTitle'),
+        modalContent: document.getElementById('modalContent'),
+        viewCalendar: document.getElementById('viewCalendar'),
+        viewList: document.getElementById('viewList'),
+        calendarView: document.getElementById('calendarView'),
+        listView: document.getElementById('listView'),
+        prevBtn: document.getElementById('prevBtn'),
+        nextBtn: document.getElementById('nextBtn')
       };
-      return map[monthName] || monthName;
-    }
 
-    function createGoogleCalendarLink(mIndex, day, ev) {
-      const month = mIndex === 0 ? "08" : "09"; // 08 = Август, 09 = Сентябрь
-      const dayStr = String(day).padStart(2, "0");
-      
-      const [startHour, startMin] = ev.time.split(":").map(Number);
-      const startIso = `2026${month}${dayStr}T${String(startHour).padStart(2, "0")}${String(startMin).padStart(2, "0")}00`;
-      
-      // Длительность 2 часа
-      const endHour = startHour + 2;
-      const endDay = endHour >= 24 ? String(day + 1).padStart(2, "0") : dayStr;
-      const endHourStr = String(endHour % 24).padStart(2, "0");
-      const endIso = `2026${month}${endDay}T${endHourStr}${String(startMin).padStart(2, "0")}00`;
+      // ==================== СОСТОЯНИЕ ====================
+      let currentMonthIndex = 1;
+      let currentView = 'calendar';
+      let cachedListHTML = null;
 
-      const title = encodeURIComponent(ev.title);
-      const details = encodeURIComponent(`Стоимость: ${ev.price}\n\nДосуговый центр «Пятница»`);
-      const location = encodeURIComponent("Досуговый центр Пятница, Краснодар");
+      // ==================== УТИЛИТЫ ====================
 
-      return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startIso}/${endIso}&details=${details}&location=${location}`;
-    }
-
-    function openModal(mIndex, day) {
-      const monthData = monthsData[mIndex];
-      const events = monthData.events[day];
-      const modal = document.getElementById("modalOverlay");
-      const title = document.getElementById("modalTitle");
-      const content = document.getElementById("modalContent");
-
-      const monthNum = mIndex === 0 ? 7 : 8;
-      const dateObj = new Date(2026, monthNum, day);
-      const dayName = weekDaysNames[dateObj.getDay()];
-
-      title.innerHTML = `<span>✦</span> ${day} ${monthData.name.toLowerCase()}, ${dayName}`;
-
-      content.innerHTML = events.map(ev => {
-        let bookingHtml = "";
-        if (ev.booking) {
-          const cleanUser = ev.booking.replace('@', '');
-          bookingHtml = `<div class="event-action">Запись: <a href="https://t.me/${cleanUser}" target="_blank">${ev.booking}</a></div>`;
-        } else {
-          bookingHtml = `<div class="event-action">Запись через <a href="https://t.me/lena_timinova" target="_blank">@lena_timinova</a></div>`;
-        }
-
-        // Обработка названия с ссылками
-        let titleHtml = ev.title;
-        if (ev.link) {
-          titleHtml = `<a href="${ev.link}" target="_blank">${ev.title}</a>`;
-        } else if (ev.links && ev.links.length > 0) {
-          // Если несколько ссылок (как у 27 сентября)
-          let linkHtml = ev.title;
-          // Добавляем ссылки на проекты в название
-          const projects = ev.links.map(l => `<a href="${l}" target="_blank">${l.replace('https://t.me/', '@')}</a>`).join(' & ');
-          linkHtml = ev.title.replace('«Популярная история»', `«Популярная история» (${projects.split(' & ')[0]})`)
-                            .replace('«Свидание с Краснодаром»', `«Свидание с Краснодаром» (${projects.split(' & ')[1]})`);
-          titleHtml = linkHtml;
-        }
-
-        const gCalLink = createGoogleCalendarLink(mIndex, day, ev);
-
-        return `
-          <div class="event-card type-${ev.type}">
-            <div class="event-top">
-              <span class="event-time-badge">${ev.time}</span>
-              <span class="event-cost">${ev.price}</span>
-            </div>
-            <div class="event-name">${titleHtml}</div>
-            ${bookingHtml}
-            <div class="event-action" style="margin-top: 6px;">
-              <a href="${gCalLink}" target="_blank" class="gcal-btn">📅 Добавить в календарь</a>
-            </div>
-          </div>
-        `;
-      }).join("");
-
-      modal.classList.add("active");
-    }
-
-    function closeModalDirect() {
-      document.getElementById("modalOverlay").classList.remove("active");
-    }
-
-    function closeModal(event) {
-      if (event.target === document.getElementById("modalOverlay")) {
-        closeModalDirect();
+      // Единый формат даты: "число месяц_родительный, день_недели_краткий"
+      function formatDate(monthData, day) {
+        const date = new Date(monthData.year, monthData.monthIndex, day);
+        const dayName = WEEKDAYS_SHORT[date.getDay()];
+        const monthGen = MONTH_GENITIVE[monthData.name] || monthData.name.toLowerCase();
+        return `${day} ${monthGen}, ${dayName}`;
       }
-    }
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeModalDirect();
-    });
+      function getFirstDayOffset(monthData) {
+        const date = new Date(monthData.year, monthData.monthIndex, 1);
+        let day = date.getDay();
+        return (day === 0) ? 6 : day - 1;
+      }
 
-    // Стартовая отрисовка
-    renderCalendar();
+      function getDayOfWeek(monthData, dayNumber) {
+        const date = new Date(monthData.year, monthData.monthIndex, dayNumber);
+        return date.getDay();
+      }
+
+      function getBookingInfo(ev) {
+        if (ev.booking) {
+          const clean = ev.booking.replace('@', '');
+          return { text: `Запись: ${ev.booking}`, url: `https://t.me/${clean}` };
+        }
+        return { text: 'ЗАПИСАТЬСЯ', url: 'https://t.me/lena_timinova' };
+      }
+
+      function getEventTitleHTML(ev) {
+        if (ev.link) {
+          return `<a href="${ev.link}" target="_blank">${ev.title}</a>`;
+        }
+        if (ev.links && ev.links.length) {
+          let title = ev.title;
+          const links = ev.links.map(l => `<a href="${l}" target="_blank">${l.replace('https://t.me/', '@')}</a>`);
+          title = title.replace('«Популярная история»', `«Популярная история» (${links[0]})`)
+                       .replace('«Свидание с Краснодаром»', `«Свидание с Краснодаром» (${links[1]})`);
+          return title;
+        }
+        return ev.title;
+      }
+
+      function getGoogleCalendarLink(monthData, day, ev) {
+        const monthStr = String(monthData.monthIndex + 1).padStart(2, '0');
+        const dayStr = String(day).padStart(2, '0');
+        const [startHour, startMin] = ev.time.split(':').map(Number);
+        const startIso = `${monthData.year}${monthStr}${dayStr}T${String(startHour).padStart(2,'0')}${String(startMin).padStart(2,'0')}00`;
+        const endHour = startHour + 2;
+        const endDay = endHour >= 24 ? day + 1 : day;
+        const endDayStr = String(endDay).padStart(2, '0');
+        const endHourStr = String(endHour % 24).padStart(2, '0');
+        const endIso = `${monthData.year}${monthStr}${endDayStr}T${endHourStr}${String(startMin).padStart(2,'0')}00`;
+        const title = encodeURIComponent(ev.title);
+        const details = encodeURIComponent(`Стоимость: ${ev.price}\n\nДосуговый центр «Пятница»`);
+        const location = encodeURIComponent('Досуговый центр Пятница, Краснодар');
+        return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startIso}/${endIso}&details=${details}&location=${location}`;
+      }
+
+      // ==================== РЕНДЕРИНГ КАЛЕНДАРЯ ====================
+      function renderCalendar() {
+        const monthData = monthsData[currentMonthIndex];
+        el.monthTitle.textContent = monthData.name;
+
+        el.prevBtn.classList.toggle('disabled', currentMonthIndex === 0);
+        el.nextBtn.classList.toggle('disabled', currentMonthIndex === monthsData.length - 1);
+
+        el.calendarGrid.innerHTML = '';
+
+        const firstDayOffset = getFirstDayOffset(monthData);
+        for (let i = 0; i < firstDayOffset; i++) {
+          const empty = document.createElement('div');
+          empty.className = 'day-cell other-month';
+          el.calendarGrid.appendChild(empty);
+        }
+
+        const today = new Date();
+        const todayMonth = today.getMonth();
+        const todayDate = today.getDate();
+        const isCurrentMonth = (todayMonth === monthData.monthIndex && today.getFullYear() === monthData.year);
+
+        for (let day = 1; day <= monthData.totalDays; day++) {
+          const dayOfWeek = getDayOfWeek(monthData, day);
+          const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+          const isToday = isCurrentMonth && todayDate === day;
+
+          const cell = document.createElement('div');
+          cell.className = `day-cell ${isWeekend ? 'weekend' : ''} ${isToday ? 'today' : ''}`;
+
+          const header = document.createElement('div');
+          header.className = 'day-header';
+          const numSpan = document.createElement('span');
+          numSpan.className = 'day-num';
+          numSpan.textContent = day;
+          header.appendChild(numSpan);
+          cell.appendChild(header);
+
+          const events = monthData.events[day] || [];
+          if (events.length) {
+            const list = document.createElement('div');
+            list.className = 'events-list';
+            events.forEach(ev => {
+              const btn = document.createElement('button');
+              btn.className = `time-btn type-${ev.type}`;
+              btn.textContent = ev.time;
+              btn.dataset.day = day;
+              btn.dataset.monthIndex = currentMonthIndex;
+              list.appendChild(btn);
+            });
+            cell.appendChild(list);
+          }
+
+          el.calendarGrid.appendChild(cell);
+        }
+
+        const totalCells = firstDayOffset + monthData.totalDays;
+        const trailing = (7 - (totalCells % 7)) % 7;
+        for (let i = 0; i < trailing; i++) {
+          const empty = document.createElement('div');
+          empty.className = 'day-cell other-month';
+          el.calendarGrid.appendChild(empty);
+        }
+
+        cachedListHTML = null;
+        if (currentView === 'list') renderList();
+      }
+
+      // ==================== РЕНДЕРИНГ СПИСКА ====================
+      function renderList() {
+        const monthData = monthsData[currentMonthIndex];
+
+        if (cachedListHTML !== null) {
+          el.listContent.innerHTML = cachedListHTML;
+          return;
+        }
+
+        const allEvents = [];
+        for (let day = 1; day <= monthData.totalDays; day++) {
+          const dayEvents = monthData.events[day];
+          if (dayEvents) {
+            dayEvents.forEach(ev => {
+              allEvents.push({ day, ...ev });
+            });
+          }
+        }
+
+        if (allEvents.length === 0) {
+          el.listContent.innerHTML = '<div class="list-empty">В этом месяце пока нет событий</div>';
+          cachedListHTML = el.listContent.innerHTML;
+          return;
+        }
+
+        const groups = new Map();
+        allEvents.forEach(ev => {
+          if (!groups.has(ev.day)) groups.set(ev.day, []);
+          groups.get(ev.day).push(ev);
+        });
+        const sortedDays = Array.from(groups.keys()).sort((a, b) => a - b);
+
+        const today = new Date();
+        const isCurrentMonth = (today.getMonth() === monthData.monthIndex && today.getFullYear() === monthData.year);
+        const todayDate = today.getDate();
+
+        let html = '';
+        sortedDays.forEach(day => {
+          const events = groups.get(day).sort((a, b) => a.time.localeCompare(b.time));
+          const dateObj = new Date(monthData.year, monthData.monthIndex, day);
+          const dayNameShort = WEEKDAYS_SHORT[dateObj.getDay()];
+          const isToday = isCurrentMonth && todayDate === day;
+          const monthGen = MONTH_GENITIVE[monthData.name] || monthData.name.toLowerCase();
+
+          html += `
+            <div class="list-day-group">
+              <div class="list-day-header">
+                <span class="list-day-number">${day}</span>
+                <div class="list-day-info">
+                  <span class="list-day-month">${monthGen}, ${dayNameShort}</span>
+                  ${isToday ? '<span class="list-today-badge">Сегодня</span>' : ''}
+                </div>
+              </div>
+          `;
+
+          events.forEach(ev => {
+            const typeClass = ev.type || 'other';
+            const priceText = ev.price || 'Уточняйте';
+            const booking = getBookingInfo(ev);
+            const titleHTML = getEventTitleHTML(ev);
+            const gcalLink = getGoogleCalendarLink(monthData, day, ev);
+
+            html += `
+              <div class="list-event-item">
+                <span class="list-event-time">${ev.time}</span>
+                <span class="list-event-dot type-${typeClass}"></span>
+                <div class="list-event-info">
+                  <div class="list-event-title">${titleHTML}</div>
+                  <div class="list-event-meta">
+                    <span class="list-event-price">${priceText}</span>
+                    <span class="list-event-booking"><a href="${booking.url}" target="_blank">${booking.text}</a></span>
+                    <a href="${gcalLink}" target="_blank" class="gcal-btn">📅</a>
+                  </div>
+                </div>
+              </div>
+            `;
+          });
+
+          html += `</div>`;
+        });
+
+        el.listContent.innerHTML = html;
+        cachedListHTML = html;
+      }
+
+      // ==================== ПЕРЕКЛЮЧЕНИЕ МЕСЯЦЕВ И ВИДОВ ====================
+      window.switchMonth = function(direction) {
+        const newIndex = currentMonthIndex + direction;
+        if (newIndex >= 0 && newIndex < monthsData.length) {
+          currentMonthIndex = newIndex;
+          renderCalendar();
+          if (currentView === 'list') renderList();
+        }
+      };
+
+      window.switchView = function(view) {
+        currentView = view;
+        if (view === 'calendar') {
+          el.calendarView.classList.remove('hidden');
+          el.calendarView.style.display = 'block';
+          el.listView.classList.remove('active');
+          el.listView.style.display = 'none';
+          el.viewCalendar.classList.add('active');
+          el.viewList.classList.remove('active');
+        } else {
+          el.calendarView.classList.add('hidden');
+          el.calendarView.style.display = 'none';
+          el.listView.classList.add('active');
+          el.listView.style.display = 'flex';
+          el.viewList.classList.add('active');
+          el.viewCalendar.classList.remove('active');
+          if (cachedListHTML === null) renderList();
+        }
+      };
+
+      // ==================== МОДАЛЬНОЕ ОКНО ====================
+      function openModal(day) {
+        const monthData = monthsData[currentMonthIndex];
+        const events = monthData.events[day];
+        if (!events) return;
+
+        // Используем единый формат даты
+        const dateStr = formatDate(monthData, day);
+        el.modalTitle.innerHTML = `<span>✦</span> ${dateStr}`;
+
+        let contentHTML = '';
+        events.forEach(ev => {
+          const booking = getBookingInfo(ev);
+          const titleHTML = getEventTitleHTML(ev);
+          const gcalLink = getGoogleCalendarLink(monthData, day, ev);
+
+          contentHTML += `
+            <div class="event-card type-${ev.type}">
+              <div class="event-top">
+                <span class="event-time-badge">${ev.time}</span>
+                <span class="event-cost">${ev.price}</span>
+              </div>
+              <div class="event-name">${titleHTML}</div>
+              <div class="event-action"><a href="${booking.url}" target="_blank">${booking.text.replace('', '')}</a>
+                <a href="${gcalLink}" target="_blank" class="gcal-btn">📅 Добавить в календарь</a>
+              </div>
+            </div>
+          `;
+        });
+
+        el.modalContent.innerHTML = contentHTML;
+        el.modalOverlay.classList.add('active');
+      }
+
+      // ==================== ОБРАБОТЧИКИ СОБЫТИЙ ====================
+      el.calendarGrid.addEventListener('click', function(e) {
+        const btn = e.target.closest('.time-btn');
+        if (!btn) return;
+        const day = parseInt(btn.dataset.day, 10);
+        if (!isNaN(day)) openModal(day);
+      });
+
+      window.closeModal = function(e) {
+        if (e.target === el.modalOverlay) closeModalDirect();
+      };
+      window.closeModalDirect = function() {
+        el.modalOverlay.classList.remove('active');
+      };
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeModalDirect();
+      });
+
+      // ==================== ИНИЦИАЛИЗАЦИЯ ====================
+      renderCalendar();
+    })();
   </script>
-  
-<!-- Yandex.Metrika counter -->
-<script type="text/javascript">
+
+  <!-- Yandex.Metrika counter -->
+  <script type="text/javascript">
     (function(m,e,t,r,i,k,a){
         m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
         m[i].l=1*new Date();
@@ -839,9 +606,9 @@
     })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=111928557', 'ym');
 
     ym(111928557, 'init', {ssr:true, clickmap:true, referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/111928557" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
+  </script>
+  <noscript><div><img src="https://mc.yandex.ru/watch/111928557" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+  <!-- /Yandex.Metrika counter -->
 
 </body>
 </html>
