@@ -474,7 +474,7 @@
           if (currentRealMonthIdx !== -1) {
             const currentMonthObj = monthsData[currentRealMonthIdx];
             // Проверяем: есть ли в текущем месяце события сегодня или в оставшиеся дни месяца
-            const hasUpcomingEventsThisMonth = Object.keys(currentMonthObj.events).some(day => Number(day) >= todayDate);
+            const hasUpcomingEventsThisMonth = Object.keys(currentMonthObj.events).some(day => Number(day) > todayDate);
 
             // Если все события текущего месяца уже прошли, и есть следующий месяц — открываем его
             if (!hasUpcomingEventsThisMonth && currentRealMonthIdx + 1 < monthsData.length) {
