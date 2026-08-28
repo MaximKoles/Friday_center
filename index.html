@@ -468,12 +468,22 @@
 
         if (monthsData.length > 0) {
           const now = new Date();
-          // Пытаемся найти текущий календарный месяц среди доступных
+          const todayDate = now.getDate();
           const currentRealMonthIdx = monthsData.findIndex(m => m.monthIndex === now.getMonth() && m.year === now.getFullYear());
+
           if (currentRealMonthIdx !== -1) {
-            currentMonthIndex = currentRealMonthIdx;
+            const currentMonthObj = monthsData[currentRealMonthIdx];
+            // Проверяем: есть ли в текущем месяце события сегодня или в оставшиеся дни месяца
+            const hasUpcomingEventsThisMonth = Object.keys(currentMonthObj.events).some(day => Number(day) >= todayDate);
+
+            // Если все события текущего месяца уже прошли, и есть следующий месяц — открываем его
+            if (!hasUpcomingEventsThisMonth && currentRealMonthIdx + 1 < monthsData.length) {
+              currentMonthIndex = currentRealMonthIdx + 1;
+            } else {
+              currentMonthIndex = currentRealMonthIdx;
+            }
           } else {
-            // Либо находим первый будущий месяц, либо первый доступный
+            // Если в текущем месяце вообще не было событий — ищем ближайший будущий месяц
             const futureIdx = monthsData.findIndex(m => m.year > now.getFullYear() || (m.year === now.getFullYear() && m.monthIndex >= now.getMonth()));
             currentMonthIndex = futureIdx !== -1 ? futureIdx : 0;
           }
