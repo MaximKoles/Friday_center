@@ -8,7 +8,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* Все стили без изменений (опущены для краткости, в финальном коде они есть) */
     :root {
       --bg-dark: #121b24;
       --bg-card: #182330;
@@ -36,10 +35,106 @@
     .nav-btn:active { transform: scale(0.92); background: var(--border); }
     .nav-btn.disabled { opacity: 0.25; cursor: not-allowed; pointer-events: none; }
     h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text-main); text-transform: capitalize; }
-    .view-toggle { display: flex; gap: 4px; background: var(--bg-dark); border-radius: 10px; padding: 3px; margin: 0 auto 8px; width: fit-content; border: 1px solid var(--border); }
+    
+    /* Стили панели переключения и поиска */
+    .controls-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 4px auto 8px;
+      width: 100%;
+      height: 38px;
+    }
+    .view-toggle { 
+      display: flex; 
+      gap: 4px; 
+      background: var(--bg-dark); 
+      border-radius: 10px; 
+      padding: 3px; 
+      border: 1px solid var(--border); 
+    }
     .view-btn { background: transparent; border: none; color: var(--text-muted); padding: 4px 14px; border-radius: 7px; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
     .view-btn.active { background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); }
     .view-btn:active { transform: scale(0.95); }
+
+    .search-open-btn {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .search-open-btn:active {
+      transform: translateY(-50%) scale(0.92);
+      color: var(--cat-lecture);
+    }
+    .search-bar-container {
+      position: absolute;
+      inset: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      gap: 8px;
+      opacity: 0;
+      pointer-events: none;
+      transform: scaleX(0.92);
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 10;
+    }
+    .search-bar-container.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scaleX(1);
+    }
+    .search-icon {
+      color: var(--text-muted);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+    }
+    .search-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-main);
+      font-size: 0.85rem;
+      font-family: inherit;
+    }
+    .search-input::placeholder {
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+    .search-close-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      line-height: 1;
+    }
+    .search-close-btn:active {
+      color: var(--cat-lecture);
+    }
+
     .legend-bar { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 8px 0 14px; padding: 6px 12px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; }
     .legend-item { display: inline-flex; align-items: center; gap: 5px; font-size: 0.72rem; font-weight: 600; color: var(--text-muted); }
     .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
@@ -87,7 +182,6 @@
     .list-event-title { font-size: 0.9rem; font-weight: 600; color: var(--text-main); line-height: 1.3; }
     .list-event-title a { color: var(--text-main); text-decoration: underline; text-decoration-color: rgba(245, 238, 220, 0.3); }
     .list-event-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; }
-    .list-event-price { }
     .list-event-booking { color: var(--text-muted); display: inline-flex; align-items: center; gap: 5px; background: rgba(141, 162, 181, 0.08); border: 1px solid rgba(141, 162, 181, 0.2); color: var(--text-muted) !important; font-size: 0.7rem; font-weight: 500; padding: 2px 8px; border-radius: 4px; text-decoration: none !important; transition: all 0.15s ease; margin-top: 4px; margin-bottom: 4px; }
     .list-event-booking a { color: var(--cat-lecture); text-decoration: none; font-weight: 600; }
     .list-today-badge { background: var(--cat-lecture); color: var(--cat-lecture-text); font-size: 0.55rem; font-weight: 700; padding: 1px 8px; border-radius: 4px; text-transform: uppercase; margin-left: 4px; }
@@ -140,9 +234,24 @@
         <h1 id="monthTitle">Сентябрь</h1>
         <button class="nav-btn" id="nextBtn" onclick="switchMonth(1)">›</button>
       </div>
-      <div class="view-toggle">
-        <button class="view-btn active" id="viewCalendar" onclick="switchView('calendar')">Календарь</button>
-        <button class="view-btn" id="viewList" onclick="switchView('list')">Список</button>
+
+      <div class="controls-wrapper">
+        <div class="view-toggle">
+          <button class="view-btn active" id="viewCalendar" onclick="switchView('calendar')">Календарь</button>
+          <button class="view-btn" id="viewList" onclick="switchView('list')">Список</button>
+        </div>
+        
+        <button class="search-open-btn" id="searchOpenBtn" onclick="openSearch()" title="Поиск">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+
+        <div class="search-bar-container" id="searchBarContainer">
+          <div class="search-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </div>
+          <input type="text" id="searchInput" class="search-input" placeholder="Поиск мероприятий..." autocomplete="off">
+          <button class="search-close-btn" onclick="closeSearch()">&times;</button>
+        </div>
       </div>
     </header>
 
@@ -175,7 +284,6 @@
     </div>
   </div>
 
-  <!-- Модальное окно -->
   <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
     <div class="modal-card" onclick="event.stopPropagation()">
       <div class="modal-header">
@@ -289,17 +397,17 @@
         calendarView: document.getElementById('calendarView'),
         listView: document.getElementById('listView'),
         prevBtn: document.getElementById('prevBtn'),
-        nextBtn: document.getElementById('nextBtn')
+        nextBtn: document.getElementById('nextBtn'),
+        searchBarContainer: document.getElementById('searchBarContainer'),
+        searchInput: document.getElementById('searchInput')
       };
 
       // ==================== СОСТОЯНИЕ ====================
       let currentMonthIndex = 1;
       let currentView = 'calendar';
-      let cachedListHTML = null;
+      let searchQuery = '';
 
       // ==================== УТИЛИТЫ ====================
-
-      // Единый формат даты: "число месяц_родительный, день_недели_краткий"
       function formatDate(monthData, day) {
         const date = new Date(monthData.year, monthData.monthIndex, day);
         const dayName = WEEKDAYS_SHORT[date.getDay()];
@@ -356,6 +464,14 @@
         return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startIso}/${endIso}&details=${details}&location=${location}`;
       }
 
+      function matchesSearch(ev) {
+        if (!searchQuery) return true;
+        const q = searchQuery.toLowerCase();
+        return (ev.title && ev.title.toLowerCase().includes(q)) || 
+               (ev.price && ev.price.toLowerCase().includes(q)) ||
+               (ev.booking && ev.booking.toLowerCase().includes(q));
+      }
+
       // ==================== РЕНДЕРИНГ КАЛЕНДАРЯ ====================
       function renderCalendar() {
         const monthData = monthsData[currentMonthIndex];
@@ -394,7 +510,9 @@
           header.appendChild(numSpan);
           cell.appendChild(header);
 
-          const events = monthData.events[day] || [];
+          const rawEvents = monthData.events[day] || [];
+          const events = rawEvents.filter(matchesSearch);
+
           if (events.length) {
             const list = document.createElement('div');
             list.className = 'events-list';
@@ -420,32 +538,29 @@
           el.calendarGrid.appendChild(empty);
         }
 
-        cachedListHTML = null;
         if (currentView === 'list') renderList();
       }
 
       // ==================== РЕНДЕРИНГ СПИСКА ====================
       function renderList() {
         const monthData = monthsData[currentMonthIndex];
-
-        if (cachedListHTML !== null) {
-          el.listContent.innerHTML = cachedListHTML;
-          return;
-        }
-
         const allEvents = [];
         for (let day = 1; day <= monthData.totalDays; day++) {
           const dayEvents = monthData.events[day];
           if (dayEvents) {
             dayEvents.forEach(ev => {
-              allEvents.push({ day, ...ev });
+              if (matchesSearch(ev)) {
+                allEvents.push({ day, ...ev });
+              }
             });
           }
         }
 
         if (allEvents.length === 0) {
-          el.listContent.innerHTML = '<div class="list-empty">В этом месяце пока нет событий</div>';
-          cachedListHTML = el.listContent.innerHTML;
+          const emptyText = searchQuery 
+            ? 'По вашему запросу ничего не найдено' 
+            : 'В этом месяце пока нет событий';
+          el.listContent.innerHTML = `<div class="list-empty">${emptyText}</div>`;
           return;
         }
 
@@ -506,8 +621,27 @@
         });
 
         el.listContent.innerHTML = html;
-        cachedListHTML = html;
       }
+
+      // ==================== УПРАВЛЕНИЕ ПОИСКОМ ====================
+      window.openSearch = function() {
+        el.searchBarContainer.classList.add('active');
+        el.searchInput.focus();
+      };
+
+      window.closeSearch = function() {
+        el.searchBarContainer.classList.remove('active');
+        el.searchInput.value = '';
+        searchQuery = '';
+        renderCalendar();
+        if (currentView === 'list') renderList();
+      };
+
+      el.searchInput.addEventListener('input', function(e) {
+        searchQuery = e.target.value.trim();
+        renderCalendar();
+        if (currentView === 'list') renderList();
+      });
 
       // ==================== ПЕРЕКЛЮЧЕНИЕ МЕСЯЦЕВ И ВИДОВ ====================
       window.switchMonth = function(direction) {
@@ -528,6 +662,7 @@
           el.listView.style.display = 'none';
           el.viewCalendar.classList.add('active');
           el.viewList.classList.remove('active');
+          renderCalendar();
         } else {
           el.calendarView.classList.add('hidden');
           el.calendarView.style.display = 'none';
@@ -535,17 +670,19 @@
           el.listView.style.display = 'flex';
           el.viewList.classList.add('active');
           el.viewCalendar.classList.remove('active');
-          if (cachedListHTML === null) renderList();
+          renderList();
         }
       };
 
       // ==================== МОДАЛЬНОЕ ОКНО ====================
       function openModal(day) {
         const monthData = monthsData[currentMonthIndex];
-        const events = monthData.events[day];
-        if (!events) return;
+        const rawEvents = monthData.events[day];
+        if (!rawEvents) return;
 
-        // Используем единый формат даты
+        const events = rawEvents.filter(matchesSearch);
+        if (!events.length) return;
+
         const dateStr = formatDate(monthData, day);
         el.modalTitle.innerHTML = `<span>✦</span> ${dateStr}`;
 
@@ -588,7 +725,12 @@
         el.modalOverlay.classList.remove('active');
       };
       document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeModalDirect();
+        if (e.key === 'Escape') {
+          closeModalDirect();
+          if (el.searchBarContainer.classList.contains('active')) {
+            closeSearch();
+          }
+        }
       });
 
       // ==================== ИНИЦИАЛИЗАЦИЯ ====================
@@ -596,7 +738,6 @@
     })();
   </script>
 
-  <!-- Yandex.Metrika counter -->
   <script type="text/javascript">
     (function(m,e,t,r,i,k,a){
         m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -608,7 +749,5 @@
     ym(111928557, 'init', {ssr:true, clickmap:true, referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
   </script>
   <noscript><div><img src="https://mc.yandex.ru/watch/111928557" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-  <!-- /Yandex.Metrika counter -->
-
-</body>
+  </body>
 </html>
