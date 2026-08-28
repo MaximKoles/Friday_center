@@ -34,9 +34,8 @@
     .nav-btn { background: var(--bg-card); border: 1px solid var(--border); color: var(--text-main); width: 34px; height: 34px; border-radius: 10px; font-size: 1.4rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s ease; }
     .nav-btn:active { transform: scale(0.92); background: var(--border); }
     .nav-btn.disabled { opacity: 0.25; cursor: not-allowed; pointer-events: none; }
-    h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text-main); text-transform: capitalize; }
+    h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text-main); text-transform: capitalize; }
     
-    /* Стили панели переключения и поиска */
     .controls-wrapper {
       position: relative;
       display: flex;
@@ -100,40 +99,11 @@
       pointer-events: auto;
       transform: scaleX(1);
     }
-    .search-icon {
-      color: var(--text-muted);
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-    }
-    .search-input {
-      flex: 1;
-      background: transparent;
-      border: none;
-      outline: none;
-      color: var(--text-main);
-      font-size: 0.85rem;
-      font-family: inherit;
-    }
-    .search-input::placeholder {
-      color: var(--text-muted);
-      opacity: 0.7;
-    }
-    .search-close-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 1.1rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 4px;
-      line-height: 1;
-    }
-    .search-close-btn:active {
-      color: var(--cat-lecture);
-    }
+    .search-icon { color: var(--text-muted); flex-shrink: 0; display: flex; align-items: center; }
+    .search-input { flex: 1; background: transparent; border: none; outline: none; color: var(--text-main); font-size: 0.85rem; font-family: inherit; }
+    .search-input::placeholder { color: var(--text-muted); opacity: 0.7; }
+    .search-close-btn { background: transparent; border: none; color: var(--text-muted); font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; line-height: 1; }
+    .search-close-btn:active { color: var(--cat-lecture); }
 
     .legend-bar { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 8px 0 14px; padding: 6px 12px; border-radius: 20px; }
     .legend-item { display: inline-flex; align-items: center; gap: 5px; font-size: 0.72rem; font-weight: 600; color: var(--text-muted); }
@@ -141,7 +111,33 @@
     .legend-dot.lecture { background-color: var(--cat-lecture); }
     .legend-dot.club { background-color: var(--cat-club); }
     .legend-dot.other { background-color: var(--cat-other); }
-    .calendar-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 10px 8px 12px; }
+    
+    .calendar-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 10px 8px 12px; min-height: 280px; position: relative; }
+    
+    .loading-spinner {
+      position: absolute;
+      inset: 0;
+      background: var(--bg-card);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      z-index: 20;
+    }
+    .spinner {
+      width: 28px;
+      height: 28px;
+      border: 3px solid rgba(229, 184, 59, 0.2);
+      border-top-color: var(--cat-lecture);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
     .weekdays-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 6px; text-align: center; }
     .weekday { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); padding: 4px 0; text-transform: uppercase; }
     .weekday.weekend { color: #e57368; }
@@ -197,7 +193,7 @@
     .day-cell.today { border: 1.5px solid var(--cat-lecture); background: rgba(229, 184, 59, 0.08); box-shadow: 0 0 10px rgba(229, 184, 59, 0.15); }
     .day-cell.today .day-num { color: var(--cat-lecture); }
 
-    /* Модальное окно (только для календаря) */
+    /* Модальное окно */
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(10, 16, 22, 0.82); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; padding: 16px; opacity: 0; visibility: hidden; transition: opacity 0.18s ease, visibility 0.18s ease; z-index: 1000; }
     .modal-overlay.active { opacity: 1; visibility: visible; }
     .modal-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 420px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7); overflow: hidden; animation: popModal 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.25); }
@@ -231,7 +227,7 @@
       <a href="https://t.me/friday_center" target="_blank" class="brand-tag">Досуговый центр «Пятница»</a>
       <div class="month-nav-header">
         <button class="nav-btn" id="prevBtn" onclick="switchMonth(-1)">‹</button>
-        <h1 id="monthTitle">Сентябрь</h1>
+        <h1 id="monthTitle">...</h1>
         <button class="nav-btn" id="nextBtn" onclick="switchMonth(1)">›</button>
       </div>
 
@@ -262,6 +258,11 @@
     </div>
 
     <div class="calendar-card">
+      <div class="loading-spinner" id="loadingState">
+        <div class="spinner"></div>
+        <span>Загружаем расписание...</span>
+      </div>
+
       <div class="calendar-view" id="calendarView">
         <div class="weekdays-grid">
           <div class="weekday">Пн</div><div class="weekday">Вт</div><div class="weekday">Ср</div>
@@ -298,93 +299,15 @@
     (function() {
       "use strict";
 
-      // ==================== ДАННЫЕ ====================
-      const monthsData = [
-        {
-          name: "Август",
-          year: 2026,
-          monthIndex: 7,
-          totalDays: 31,
-          events: {
-            1: [{ time: "12:00", title: "Интерактивный кукольный спектакль", link: "https://t.me/friday_center/4813", price: "800 ₽ за ребенка", type: "other" }],
-            3: [{ time: "19:00", title: "Клуб любителей сериалов", link: "https://t.me/friday_center/4764", price: "От 400 ₽", type: "club" }],
-            4: [{ time: "19:00", title: "Благотворительный английский клуб с Элиной", link: "https://t.me/friday_center/4835", price: "Донат в Краснодог", type: "club" }],
-            5: [{ time: "19:00", title: "Мастер-класс от Леры Гуль по монтажу видео в CapCut", link: "https://t.me/friday_center/4853", price: "1500 ₽", type: "lecture" }],
-            6: [{ time: "19:00", title: "Арт встреча с Татьяной Чановой о Валентине Серове", link: "https://t.me/friday_center/4816", price: "1200 ₽", type: "club" }],
-            7: [{ time: "19:00", title: "Играем в спортивную мафию", link: "https://t.me/friday_center/4847", price: "От 400 ₽", type: "other" }],
-            8: [{ time: "12:00", title: "Воркшоп «Спокойно. Это собеседование»", link: "https://t.me/friday_center/4844", price: "1400 ₽", type: "lecture" }],
-            10: [{ time: "19:00", title: "Клуб путешественников «Винодельни Кубани»", link: "https://t.me/friday_center/4875", price: "800 ₽", booking: "@olgagidkrd", type: "club" }],
-            11: [
-              { time: "15:00", title: "Зрелые встречи | играем в игры на сближение", link: "https://t.me/friday_center/4904", price: "Орг. взнос 500 ₽", type: "club" },
-              { time: "19:00", title: "Хобби час | учимся играть на гитаре", link: "https://t.me/friday_center/4910", price: "От 400 ₽", type: "club" }
-            ],
-            12: [{ time: "19:00", title: "Лекция от архитектора Евгении Княжевой «Куда и зачем растет Краснодар»", link: "https://t.me/friday_center/4862", price: "700 ₽", type: "lecture" }],
-            13: [{ time: "19:00", title: "Драмеди шоу", link: "https://t.me/friday_center/4825", price: "1100 ₽ (в июле 1000 ₽)", type: "other" }],
-            14: [{ time: "15:00", title: "Спортивный покер", link: "https://t.me/friday_center/4902", price: "600 ₽", type: "other" }],
-            15: [{ time: "12:00", title: "Книжный клуб «Культурный код/т»", link: "https://t.me/friday_center/4913", price: "700 ₽", booking: "@NansyKanva", type: "club" }],
-            17: [{ time: "19:00", title: "Квартирник для новичков", link: "https://t.me/friday_center/4955", price: "600 ₽", type: "other" }],
-            18: [{ time: "18:30", title: "Киноклуб «Не проецируй!» Смотрим «Что-то не так с Кевином»", link: "https://t.me/friday_center/4938", price: "600 ₽", type: "club" }],
-            19: [{ time: "19:00", title: "Трансформационная игра «Выбор»", link: "https://t.me/friday_center/4916", price: "1500 ₽", type: "other" }],
-            20: [{ time: "19:00", title: "Клуб диванных анимэ критиков", link: "https://t.me/friday_center/4851", price: "700 ₽", booking: "@wise_phylosopher", type: "club" }],
-            23: [{ time: "12:00", title: "Death cafe / смерть кафе", price: "Оплата по желанию", booking: "@Pro_thanatos", type: "other" }],
-            24: [{ time: "18:00", title: "Дискуссионный клуб «Разговоры о». Тема: страх", link: "https://t.me/friday_center/4941", price: "900 ₽", type: "club" }],
-            25: [
-              { time: "15:00", title: "Хобби часы | Цианотипия на ткани с Кристиной Файбер", link: "https://t.me/friday_center/4953", price: "От 400 ₽", type: "club" },
-              { time: "18:30", title: "Зрелые встречи 55+ | творческий вечер, провожаем лето", link: "https://t.me/friday_center/4904", price: "Орг. взнос 500 ₽", type: "club" }
-            ],
-            26: [
-              { time: "15:00", title: "Спортивный покер", link: "https://t.me/friday_center/4902", price: "600 ₽", type: "other" },
-              { time: "19:00", title: "Концерт-беседа от SoulSounds «Августовские диалоги: эхо уходящего лета» (Флейта, виолончель, гитара)", link: "https://t.me/friday_center/4911", price: "1000 ₽", type: "other" }
-            ],
-            27: [{ time: "19:00", title: "Квартирник", price: "600 ₽", type: "other" }],
-            28: [{ time: "19:00", title: "Бал смыслов", link: "https://t.me/friday_center/4895", price: "1000 ₽", type: "other" }]
-          }
-        },
-        {
-          name: "Сентябрь",
-          year: 2026,
-          monthIndex: 8,
-          totalDays: 30,
-          events: {
-            1: [{ time: "19:00", title: "Как сделать красивую презентацию чего угодно", link: "https://t.me/friday_center/4993", price: "900 ₽", type: "lecture" }],
-            3: [{ time: "19:00", title: "Спортивная мафия", link: "https://t.me/friday_center/4997", price: "600 ₽", type: "other" }],
-            6: [
-              { time: "12:00", title: "Кукольный спектакль для детей до 10 лет «Три поросенка»", link: "https://t.me/friday_center/4992", price: "800 ₽", type: "other" },
-              { time: "17:00", title: "Киноистория «Коко Шанель. Женщина, изменившая моду»", link: "https://t.me/friday_center/4994", price: "1500 ₽", type: "lecture" }
-            ],
-            7: [{ time: "19:00", title: "Клуб любителей сериалов", link: "https://t.me/friday_center/4908", price: "От 400 ₽", type: "club" }],
-            8: [
-              { time: "15:00", title: "Зрелые встречи 55+ | Фото прогулка по Красной с Марией Абубакировой", price: "Орг. взнос 500 ₽", type: "club" },
-              { time: "19:00", title: "Хобби часы | укулеле для начинающих с Ланой Эннс", price: "От 400 ₽", type: "club" }
-            ],
-            9: [{ time: "19:00", title: "Домашний покер", link: "https://t.me/friday_center/5003", price: "600 ₽", type: "other" }],
-            10: [{ time: "19:00", title: "Лекция от нейробиолога Вероники Малахиевой «Норадреналин и Голубое пятно: механизм страха и фокуса»", price: "700 ₽", type: "lecture" }],
-            12: [{ time: "12:00", title: "Встреча книжного клуба «Культурный код/т»", price: "700 ₽", booking: "@NansyKanva", type: "club" }],
-            14: [{ time: "19:00", title: "Иностранный квартирник", price: "600 ₽", type: "other" }],
-            16: [{ time: "19:00", title: "Арт встреча с Татьяной Чановой «Репин»", price: "1200 ₽", type: "club" }],
-            17: [{ time: "19:00", title: "Клуб диванных аниме критиков", price: "700 ₽", booking: "@wise_phylosopher", type: "club" }],
-            20: [{ time: "12:00", title: "Death cafe | смерть кафе", price: "Донат по желанию", booking: "@Pro_thanatos", type: "other" }],
-            21: [{ time: "19:00", title: "Клуб путешественников", price: "800 ₽", booking: "@olgagidkrd", type: "club" }],
-            22: [
-              { time: "15:00", title: "Зрелые встречи 55+ | экскурсия «Предприимчивый Екатеринодар: торговые фамилии, магазины и большие дела» с Дарьей Щербаковой", price: "Орг. взнос 500 ₽", type: "club" },
-              { time: "19:00", title: "Хобби клуб укулелистов. Встреча для продолжающих", price: "От 400 ₽", type: "club" }
-            ],
-            23: [{ time: "19:00", title: "Музыкальные истории Сергея Острицова. Брайан Джонс", price: "1000 ₽", type: "lecture" }],
-            24: [{ time: "19:00", title: "Драмеди шоу", price: "1100 ₽", type: "other" }],
-            25: [{ time: "15:00", title: "Домашний покер", link: "https://t.me/friday_center/5003", price: "600 ₽", type: "other" }],
-            27: [{ time: "14:00", title: "Лекция от проектов «Популярная история» & «Свидание с Краснодаром». «За партой в Российской империи: уроки Екатеринодара»", price: "700 ₽", type: "lecture", links: ["https://t.me/popular_history_krd", "https://t.me/krasnodarwithlove"] }],
-            28: [{ time: "19:00", title: "Квартирник", price: "600 ₽", type: "other" }],
-            29: [{ time: "18:00", title: "Дискуссионный клуб «Разговоры о». Тема: выбор", price: "900 ₽", type: "club" }],
-            30: [{ time: "19:00", title: "Трансформационная игра «Выбор»", price: "1500 ₽", type: "other" }]
-          }
-        }
-      ];
+      // ==================== ССЫЛКА НА GOOGLE ТАБЛИЦУ ====================
+      const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR4YgaFY5i_Ie8NZ9WW7gBAz_1CT6FQEybQDbA8fgs_Zr09b8ulPI1T3BVKpf_LiPWgTQ3CykxRNZgv/pub?output=csv";
 
       // ==================== КОНСТАНТЫ ====================
       const WEEKDAYS_SHORT = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
-      const MONTH_GENITIVE = { "Август": "августа", "Сентябрь": "сентября" };
+      const MONTH_NAMES = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+      const MONTH_GENITIVE = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
 
-      // ==================== DOM-кеш ====================
+      // ==================== DOM-КЕШ ====================
       const el = {
         monthTitle: document.getElementById('monthTitle'),
         calendarGrid: document.getElementById('calendarGrid'),
@@ -396,45 +319,211 @@
         viewList: document.getElementById('viewList'),
         calendarView: document.getElementById('calendarView'),
         listView: document.getElementById('listView'),
-        prevBtn: document.getElementById('prevBtn'),
-        nextBtn: document.getElementById('nextBtn'),
         searchBarContainer: document.getElementById('searchBarContainer'),
-        searchInput: document.getElementById('searchInput')
+        searchInput: document.getElementById('searchInput'),
+        loadingState: document.getElementById('loadingState'),
+        prevBtn: document.getElementById('prevBtn'),
+        nextBtn: document.getElementById('nextBtn')
       };
 
       // ==================== СОСТОЯНИЕ ====================
-      let currentMonthIndex = 1;
+      let monthsData = []; // Только месяцы, в которых ЕСТЬ события
+      let currentMonthIndex = 0;
       let currentView = 'calendar';
       let searchQuery = '';
 
+      // ==================== ПАРСИНГ CSV ====================
+      function parseCSV(text) {
+        const rows = [];
+        let row = [];
+        let inQuotes = false;
+        let token = '';
+
+        text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+        const firstLine = text.split('\n')[0] || '';
+        const delimiter = (firstLine.match(/;/g) || []).length > (firstLine.match(/,/g) || []).length ? ';' : ',';
+
+        for (let i = 0; i < text.length; i++) {
+          const c = text[i];
+          const next = text[i + 1];
+
+          if (c === '"') {
+            if (inQuotes && next === '"') {
+              token += '"';
+              i++;
+            } else {
+              inQuotes = !inQuotes;
+            }
+          } else if (c === delimiter && !inQuotes) {
+            row.push(token.trim());
+            token = '';
+          } else if (c === '\n' && !inQuotes) {
+            row.push(token.trim());
+            if (row.length > 1 || row[0] !== '') rows.push(row);
+            row = [];
+            token = '';
+          } else {
+            token += c;
+          }
+        }
+        if (token || row.length) {
+          row.push(token.trim());
+          if (row.length > 1 || row[0] !== '') rows.push(row);
+        }
+
+        if (rows.length < 2) return [];
+
+        const headerAliases = {
+          'date': 'date', 'дата': 'date', 'день': 'date',
+          'time': 'time', 'время': 'time',
+          'title': 'title', 'название': 'title', 'событие': 'title', 'мероприятие': 'title',
+          'price': 'price', 'цена': 'price', 'стоимость': 'price',
+          'type': 'type', 'тип': 'type', 'категория': 'type',
+          'booking': 'booking', 'запись': 'booking', 'контакт': 'booking',
+          'link': 'link', 'ссылка': 'link'
+        };
+
+        const headers = rows[0].map(h => {
+          const clean = h.toLowerCase().trim();
+          return headerAliases[clean] || clean;
+        });
+
+        return rows.slice(1).map(r => {
+          const item = {};
+          headers.forEach((h, idx) => {
+            item[h] = r[idx] !== undefined ? r[idx] : '';
+          });
+          return item;
+        });
+      }
+
+      function parseDateString(str) {
+        if (!str) return null;
+        str = str.trim();
+        let year, month, day;
+
+        if (str.includes('-')) {
+          const p = str.split('-').map(Number);
+          year = p[0]; month = p[1] - 1; day = p[2];
+        } else if (str.includes('.')) {
+          const p = str.split('.').map(Number);
+          day = p[0]; month = p[1] - 1; year = p[2];
+        } else if (str.includes('/')) {
+          const p = str.split('/').map(Number);
+          day = p[0]; month = p[1] - 1; year = p[2];
+        } else {
+          return null;
+        }
+
+        if (year < 100) year += 2000;
+        if (isNaN(year) || isNaN(month) || isNaN(day) || month < 0 || month > 11 || day < 1 || day > 31) {
+          return null;
+        }
+        return { year, month, day };
+      }
+
+      function processParsedData(parsedRows) {
+        const map = new Map();
+
+        parsedRows.forEach(row => {
+          if (!row.date || !row.title) return;
+          const parsed = parseDateString(row.date);
+          if (!parsed) return;
+
+          const { year, month, day } = parsed;
+          const monthKey = `${year}-${String(month).padStart(2, '0')}`;
+
+          if (!map.has(monthKey)) {
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            map.set(monthKey, {
+              name: MONTH_NAMES[month],
+              year: year,
+              monthIndex: month,
+              totalDays: totalDays,
+              events: {}
+            });
+          }
+
+          const mObj = map.get(monthKey);
+          if (!mObj.events[day]) mObj.events[day] = [];
+
+          let type = (row.type || '').toLowerCase();
+          if (type.includes('лекц') || type.includes('мк') || type.includes('мастер')) type = 'lecture';
+          else if (type.includes('клуб') || type.includes('встреч')) type = 'club';
+          else if (!['lecture', 'club', 'other'].includes(type)) type = 'other';
+
+          mObj.events[day].push({
+            time: row.time || '19:00',
+            title: row.title,
+            link: row.link || '',
+            price: row.price || 'Уточняйте',
+            booking: row.booking || '',
+            type: type
+          });
+        });
+
+        // Формируем список ТОЛЬКО тех месяцев, где есть события, и сортируем хронологически
+        const sortedKeys = Array.from(map.keys()).sort();
+        monthsData = sortedKeys.map(k => map.get(k));
+
+        if (monthsData.length > 0) {
+          const now = new Date();
+          // Пытаемся найти текущий календарный месяц среди доступных
+          const currentRealMonthIdx = monthsData.findIndex(m => m.monthIndex === now.getMonth() && m.year === now.getFullYear());
+          if (currentRealMonthIdx !== -1) {
+            currentMonthIndex = currentRealMonthIdx;
+          } else {
+            // Либо находим первый будущий месяц, либо первый доступный
+            const futureIdx = monthsData.findIndex(m => m.year > now.getFullYear() || (m.year === now.getFullYear() && m.monthIndex >= now.getMonth()));
+            currentMonthIndex = futureIdx !== -1 ? futureIdx : 0;
+          }
+        } else {
+          // Если вообще нет событий, показываем текущий пустой месяц
+          const now = new Date();
+          monthsData = [{
+            name: MONTH_NAMES[now.getMonth()],
+            year: now.getFullYear(),
+            monthIndex: now.getMonth(),
+            totalDays: new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate(),
+            events: {}
+          }];
+          currentMonthIndex = 0;
+        }
+      }
+
+      async function loadData() {
+        try {
+          const cacheBusterUrl = `${GOOGLE_SHEET_CSV_URL}&_t=${Date.now()}`;
+          const response = await fetch(cacheBusterUrl);
+          if (!response.ok) throw new Error('Ошибка сети при загрузке CSV');
+          
+          const csvText = await response.text();
+          const parsed = parseCSV(csvText);
+          processParsedData(parsed);
+        } catch (e) {
+          console.warn("Данные из Google Таблицы не загрузились:", e);
+        } finally {
+          el.loadingState.style.display = 'none';
+          renderCurrentView();
+        }
+      }
+
       // ==================== УТИЛИТЫ ====================
-      function formatDate(monthData, day) {
-        const date = new Date(monthData.year, monthData.monthIndex, day);
+      function formatDate(year, monthIndex, day) {
+        const date = new Date(year, monthIndex, day);
         const dayName = WEEKDAYS_SHORT[date.getDay()];
-        const monthGen = MONTH_GENITIVE[monthData.name] || monthData.name.toLowerCase();
+        const monthGen = MONTH_GENITIVE[monthIndex];
         return `${day} ${monthGen}, ${dayName}`;
       }
 
-      function getFirstDayOffset(monthData) {
-        const date = new Date(monthData.year, monthData.monthIndex, 1);
-        let day = date.getDay();
-        return (day === 0) ? 6 : day - 1;
-      }
-
-      function getDayOfWeek(monthData, dayNumber) {
-        const date = new Date(monthData.year, monthData.monthIndex, dayNumber);
-        return date.getDay();
-      }
-
-      // Генерация ссылки Telegram с предзаполненным текстом заявки
-      function getBookingInfo(ev, monthData, day) {
-        const dateStr = formatDate(monthData, day);
+      function getBookingInfo(ev, year, monthIndex, day) {
+        const dateStr = formatDate(year, monthIndex, day);
         const priceStr = ev.price || 'Уточняется';
-        const msg = `Здравствуйте! Хочу записаться на:\n«${ev.title}»\n📅 ${dateStr}\n⏰ ${ev.time}\n💰 ${priceStr}`;
+        const msg = `Здравствуйте! Хочу записаться на мероприятие:\n«${ev.title}»\n📅 Дата: ${dateStr}\n⏰ Время: ${ev.time}\n💰 Стоимость: ${priceStr}`;
         const encodedMsg = encodeURIComponent(msg);
 
         if (ev.booking) {
-          const clean = ev.booking.replace('@', '');
+          const clean = ev.booking.replace('@', '').trim();
           return { text: `Запись: ${ev.booking}`, url: `https://t.me/${clean}?text=${encodedMsg}` };
         }
         return { text: 'ЗАПИСАТЬСЯ', url: `https://t.me/lena_timinova?text=${encodedMsg}` };
@@ -444,26 +533,19 @@
         if (ev.link) {
           return `<a href="${ev.link}" target="_blank">${ev.title}</a>`;
         }
-        if (ev.links && ev.links.length) {
-          let title = ev.title;
-          const links = ev.links.map(l => `<a href="${l}" target="_blank">${l.replace('https://t.me/', '@')}</a>`);
-          title = title.replace('«Популярная история»', `«Популярная история» (${links[0]})`)
-                       .replace('«Свидание с Краснодаром»', `«Свидание с Краснодаром» (${links[1]})`);
-          return title;
-        }
         return ev.title;
       }
 
-      function getGoogleCalendarLink(monthData, day, ev) {
-        const monthStr = String(monthData.monthIndex + 1).padStart(2, '0');
+      function getGoogleCalendarLink(year, monthIndex, day, ev) {
+        const monthStr = String(monthIndex + 1).padStart(2, '0');
         const dayStr = String(day).padStart(2, '0');
-        const [startHour, startMin] = ev.time.split(':').map(Number);
-        const startIso = `${monthData.year}${monthStr}${dayStr}T${String(startHour).padStart(2,'0')}${String(startMin).padStart(2,'0')}00`;
+        const [startHour, startMin] = (ev.time || '19:00').split(':').map(Number);
+        const startIso = `${year}${monthStr}${dayStr}T${String(startHour).padStart(2,'0')}${String(startMin || 0).padStart(2,'0')}00`;
         const endHour = startHour + 2;
         const endDay = endHour >= 24 ? day + 1 : day;
         const endDayStr = String(endDay).padStart(2, '0');
         const endHourStr = String(endHour % 24).padStart(2, '0');
-        const endIso = `${monthData.year}${monthStr}${endDayStr}T${endHourStr}${String(startMin).padStart(2,'0')}00`;
+        const endIso = `${year}${monthStr}${endDayStr}T${endHourStr}${String(startMin || 0).padStart(2,'0')}00`;
         const title = encodeURIComponent(ev.title);
         const details = encodeURIComponent(`Стоимость: ${ev.price}\n\nДосуговый центр «Пятница»`);
         const location = encodeURIComponent('Досуговый центр Пятница, Краснодар');
@@ -478,17 +560,27 @@
                (ev.booking && ev.booking.toLowerCase().includes(q));
       }
 
+      function updateNavButtons() {
+        el.prevBtn.disabled = (currentMonthIndex <= 0);
+        el.nextBtn.disabled = (currentMonthIndex >= monthsData.length - 1);
+      }
+
       // ==================== РЕНДЕРИНГ КАЛЕНДАРЯ ====================
       function renderCalendar() {
-        const monthData = monthsData[currentMonthIndex];
-        el.monthTitle.textContent = monthData.name;
+        const m = monthsData[currentMonthIndex];
+        if (!m) return;
 
-        el.prevBtn.classList.toggle('disabled', currentMonthIndex === 0);
-        el.nextBtn.classList.toggle('disabled', currentMonthIndex === monthsData.length - 1);
+        updateNavButtons();
+
+        const realYear = new Date().getFullYear();
+        el.monthTitle.textContent = `${m.name}${m.year !== realYear ? ' ' + m.year : ''}`;
 
         el.calendarGrid.innerHTML = '';
 
-        const firstDayOffset = getFirstDayOffset(monthData);
+        const firstDayDate = new Date(m.year, m.monthIndex, 1);
+        let firstDayOffset = firstDayDate.getDay();
+        firstDayOffset = (firstDayOffset === 0) ? 6 : firstDayOffset - 1;
+
         for (let i = 0; i < firstDayOffset; i++) {
           const empty = document.createElement('div');
           empty.className = 'day-cell other-month';
@@ -496,12 +588,12 @@
         }
 
         const today = new Date();
-        const todayMonth = today.getMonth();
+        const isCurrentMonth = (today.getMonth() === m.monthIndex && today.getFullYear() === m.year);
         const todayDate = today.getDate();
-        const isCurrentMonth = (todayMonth === monthData.monthIndex && today.getFullYear() === monthData.year);
 
-        for (let day = 1; day <= monthData.totalDays; day++) {
-          const dayOfWeek = getDayOfWeek(monthData, day);
+        for (let day = 1; day <= m.totalDays; day++) {
+          const dateObj = new Date(m.year, m.monthIndex, day);
+          const dayOfWeek = dateObj.getDay();
           const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
           const isToday = isCurrentMonth && todayDate === day;
 
@@ -516,7 +608,7 @@
           header.appendChild(numSpan);
           cell.appendChild(header);
 
-          const rawEvents = monthData.events[day] || [];
+          const rawEvents = (m.events && m.events[day]) || [];
           const events = rawEvents.filter(matchesSearch);
 
           if (events.length) {
@@ -527,7 +619,6 @@
               btn.className = `time-btn type-${ev.type}`;
               btn.textContent = ev.time;
               btn.dataset.day = day;
-              btn.dataset.monthIndex = currentMonthIndex;
               list.appendChild(btn);
             });
             cell.appendChild(list);
@@ -536,30 +627,30 @@
           el.calendarGrid.appendChild(cell);
         }
 
-        const totalCells = firstDayOffset + monthData.totalDays;
+        const totalCells = firstDayOffset + m.totalDays;
         const trailing = (7 - (totalCells % 7)) % 7;
         for (let i = 0; i < trailing; i++) {
           const empty = document.createElement('div');
           empty.className = 'day-cell other-month';
           el.calendarGrid.appendChild(empty);
         }
-
-        if (currentView === 'list') renderList();
       }
 
       // ==================== РЕНДЕРИНГ СПИСКА ====================
       function renderList() {
-        const monthData = monthsData[currentMonthIndex];
+        const m = monthsData[currentMonthIndex];
+        if (!m) return;
+
+        updateNavButtons();
+
         const allEvents = [];
-        for (let day = 1; day <= monthData.totalDays; day++) {
-          const dayEvents = monthData.events[day];
-          if (dayEvents) {
-            dayEvents.forEach(ev => {
-              if (matchesSearch(ev)) {
-                allEvents.push({ day, ...ev });
-              }
-            });
-          }
+        for (let day = 1; day <= m.totalDays; day++) {
+          const dayEvents = (m.events && m.events[day]) || [];
+          dayEvents.forEach(ev => {
+            if (matchesSearch(ev)) {
+              allEvents.push({ day, ...ev });
+            }
+          });
         }
 
         if (allEvents.length === 0) {
@@ -578,16 +669,16 @@
         const sortedDays = Array.from(groups.keys()).sort((a, b) => a - b);
 
         const today = new Date();
-        const isCurrentMonth = (today.getMonth() === monthData.monthIndex && today.getFullYear() === monthData.year);
+        const isCurrentMonth = (today.getMonth() === m.monthIndex && today.getFullYear() === m.year);
         const todayDate = today.getDate();
 
         let html = '';
         sortedDays.forEach(day => {
           const events = groups.get(day).sort((a, b) => a.time.localeCompare(b.time));
-          const dateObj = new Date(monthData.year, monthData.monthIndex, day);
+          const dateObj = new Date(m.year, m.monthIndex, day);
           const dayNameShort = WEEKDAYS_SHORT[dateObj.getDay()];
           const isToday = isCurrentMonth && todayDate === day;
-          const monthGen = MONTH_GENITIVE[monthData.name] || monthData.name.toLowerCase();
+          const monthGen = MONTH_GENITIVE[m.monthIndex];
 
           html += `
             <div class="list-day-group">
@@ -603,9 +694,9 @@
           events.forEach(ev => {
             const typeClass = ev.type || 'other';
             const priceText = ev.price || 'Уточняйте';
-            const booking = getBookingInfo(ev, monthData, day);
+            const booking = getBookingInfo(ev, m.year, m.monthIndex, day);
             const titleHTML = getEventTitleHTML(ev);
-            const gcalLink = getGoogleCalendarLink(monthData, day, ev);
+            const gcalLink = getGoogleCalendarLink(m.year, m.monthIndex, day, ev);
 
             html += `
               <div class="list-event-item">
@@ -629,6 +720,14 @@
         el.listContent.innerHTML = html;
       }
 
+      function renderCurrentView() {
+        if (currentView === 'calendar') {
+          renderCalendar();
+        } else {
+          renderList();
+        }
+      }
+
       // ==================== УПРАВЛЕНИЕ ПОИСКОМ ====================
       window.openSearch = function() {
         el.searchBarContainer.classList.add('active');
@@ -639,23 +738,20 @@
         el.searchBarContainer.classList.remove('active');
         el.searchInput.value = '';
         searchQuery = '';
-        renderCalendar();
-        if (currentView === 'list') renderList();
+        renderCurrentView();
       };
 
       el.searchInput.addEventListener('input', function(e) {
         searchQuery = e.target.value.trim();
-        renderCalendar();
-        if (currentView === 'list') renderList();
+        renderCurrentView();
       });
 
       // ==================== ПЕРЕКЛЮЧЕНИЕ МЕСЯЦЕВ И ВИДОВ ====================
       window.switchMonth = function(direction) {
-        const newIndex = currentMonthIndex + direction;
-        if (newIndex >= 0 && newIndex < monthsData.length) {
-          currentMonthIndex = newIndex;
-          renderCalendar();
-          if (currentView === 'list') renderList();
+        const nextIdx = currentMonthIndex + direction;
+        if (nextIdx >= 0 && nextIdx < monthsData.length) {
+          currentMonthIndex = nextIdx;
+          renderCurrentView();
         }
       };
 
@@ -682,21 +778,21 @@
 
       // ==================== МОДАЛЬНОЕ ОКНО ====================
       function openModal(day) {
-        const monthData = monthsData[currentMonthIndex];
-        const rawEvents = monthData.events[day];
-        if (!rawEvents) return;
+        const m = monthsData[currentMonthIndex];
+        if (!m || !m.events || !m.events[day]) return;
 
+        const rawEvents = m.events[day];
         const events = rawEvents.filter(matchesSearch);
         if (!events.length) return;
 
-        const dateStr = formatDate(monthData, day);
+        const dateStr = formatDate(m.year, m.monthIndex, day);
         el.modalTitle.innerHTML = `<span>✦</span> ${dateStr}`;
 
         let contentHTML = '';
         events.forEach(ev => {
-          const booking = getBookingInfo(ev, monthData, day);
+          const booking = getBookingInfo(ev, m.year, m.monthIndex, day);
           const titleHTML = getEventTitleHTML(ev);
-          const gcalLink = getGoogleCalendarLink(monthData, day, ev);
+          const gcalLink = getGoogleCalendarLink(m.year, m.monthIndex, day, ev);
 
           contentHTML += `
             <div class="event-card type-${ev.type}">
@@ -705,7 +801,7 @@
                 <span class="event-cost">${ev.price}</span>
               </div>
               <div class="event-name">${titleHTML}</div>
-              <div class="event-action"><a href="${booking.url}" target="_blank">${booking.text.replace('', '')}</a>
+              <div class="event-action"><a href="${booking.url}" target="_blank">${booking.text}</a>
                 <a href="${gcalLink}" target="_blank" class="gcal-btn">📅 Добавить в календарь</a>
               </div>
             </div>
@@ -739,8 +835,8 @@
         }
       });
 
-      // ==================== ИНИЦИАЛИЗАЦИЯ ====================
-      renderCalendar();
+      // ==================== СТАРТ ====================
+      loadData();
     })();
   </script>
 
