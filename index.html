@@ -426,12 +426,18 @@
         return date.getDay();
       }
 
-      function getBookingInfo(ev) {
+      // Генерация ссылки Telegram с предзаполненным текстом заявки
+      function getBookingInfo(ev, monthData, day) {
+        const dateStr = formatDate(monthData, day);
+        const priceStr = ev.price || 'Уточняется';
+        const msg = `Здравствуйте! Хочу записаться на мероприятие:\n«${ev.title}»\n📅 Дата: ${dateStr}\n⏰ Время: ${ev.time}\n💰 Стоимость: ${priceStr}`;
+        const encodedMsg = encodeURIComponent(msg);
+
         if (ev.booking) {
           const clean = ev.booking.replace('@', '');
-          return { text: `Запись: ${ev.booking}`, url: `https://t.me/${clean}` };
+          return { text: `Запись: ${ev.booking}`, url: `https://t.me/${clean}?text=${encodedMsg}` };
         }
-        return { text: 'ЗАПИСАТЬСЯ', url: 'https://t.me/lena_timinova' };
+        return { text: 'ЗАПИСАТЬСЯ', url: `https://t.me/lena_timinova?text=${encodedMsg}` };
       }
 
       function getEventTitleHTML(ev) {
@@ -597,7 +603,7 @@
           events.forEach(ev => {
             const typeClass = ev.type || 'other';
             const priceText = ev.price || 'Уточняйте';
-            const booking = getBookingInfo(ev);
+            const booking = getBookingInfo(ev, monthData, day);
             const titleHTML = getEventTitleHTML(ev);
             const gcalLink = getGoogleCalendarLink(monthData, day, ev);
 
@@ -688,7 +694,7 @@
 
         let contentHTML = '';
         events.forEach(ev => {
-          const booking = getBookingInfo(ev);
+          const booking = getBookingInfo(ev, monthData, day);
           const titleHTML = getEventTitleHTML(ev);
           const gcalLink = getGoogleCalendarLink(monthData, day, ev);
 
@@ -749,5 +755,5 @@
     ym(111928557, 'init', {ssr:true, clickmap:true, referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
   </script>
   <noscript><div><img src="https://mc.yandex.ru/watch/111928557" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-  </body>
+</body>
 </html>
