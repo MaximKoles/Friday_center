@@ -430,7 +430,7 @@
       function getBookingInfo(ev, monthData, day) {
         const dateStr = formatDate(monthData, day);
         const priceStr = ev.price || 'Уточняется';
-        const msg = `Здравствуйте! Хочу записаться на мероприятие:\n«${ev.title}»\n📅 Дата: ${dateStr}\n⏰ Время: ${ev.time}\n💰 Стоимость: ${priceStr}`;
+        const msg = `Здравствуйте! Хочу записаться на:\n«${ev.title}»\n📅 ${dateStr}\n⏰ ${ev.time}\n💰 ${priceStr}`;
         const encodedMsg = encodeURIComponent(msg);
 
         if (ev.booking) {
