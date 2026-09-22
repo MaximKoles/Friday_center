@@ -24,18 +24,32 @@
       --text-muted: #8da2b5;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body { font-family: 'Inter', sans-serif; background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 16px 10px 32px; }
-    .container { width: 100%; max-width: 520px; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 10px 32px;
+    }
+    .container {
+      width: 100%;
+      max-width: 520px;
+      transition: max-width 0.2s ease;
+    }
+
     header { text-align: center; margin-bottom: 12px; }
     .brand-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(229, 184, 59, 0.12); color: var(--cat-lecture); padding: 4px 12px; border-radius: 30px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 8px; text-decoration: none; cursor: pointer; transition: background 0.2s; }
     .brand-tag:hover { background: rgba(229, 184, 59, 0.2); }
     .brand-tag:active { transform: scale(0.96); }
-    .month-nav-header { display: flex; align-items: center; justify-content: space-between; padding: 0 0px; margin-bottom: 4px; }
+    .month-nav-header { display: flex; align-items: center; justify-content: space-between; padding: 0; margin-bottom: 4px; }
     .nav-btn { background: var(--bg-card); border: 1px solid var(--border); color: var(--text-main); width: 34px; height: 34px; border-radius: 10px; font-size: 1.4rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s ease; }
     .nav-btn:active { transform: scale(0.92); background: var(--border); }
-    .nav-btn:disabled,.nav-btn[disabled] {  opacity: 0.2;  cursor: not-allowed;  pointer-events: none; }
+    .nav-btn:disabled, .nav-btn[disabled] { opacity: 0.2; cursor: not-allowed; pointer-events: none; }
     h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text-main); text-transform: capitalize; }
-    
+
     .controls-wrapper {
       position: relative;
       display: flex;
@@ -111,9 +125,27 @@
     .legend-dot.lecture { background-color: var(--cat-lecture); }
     .legend-dot.club { background-color: var(--cat-club); }
     .legend-dot.other { background-color: var(--cat-other); }
-    
+
+    /* Баннер-предупреждение при локальном открытии через file:// */
+    .local-warning-banner {
+      display: none;
+      background: rgba(229, 115, 104, 0.14);
+      border: 1px solid rgba(229, 115, 104, 0.4);
+      color: #ffb4ac;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      line-height: 1.4;
+      margin-bottom: 12px;
+      text-align: left;
+    }
+    .local-warning-banner a {
+      color: var(--cat-lecture);
+      font-weight: 700;
+    }
+
     .calendar-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 10px 8px 12px; min-height: 280px; position: relative; }
-    
+
     .loading-spinner {
       position: absolute;
       inset: 0;
@@ -142,17 +174,187 @@
     .weekday { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); padding: 4px 0; text-transform: uppercase; }
     .weekday.weekend { color: #e57368; }
     .days-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-    .day-cell { background-color: var(--bg-cell); border: 1px solid var(--border); border-radius: 8px; min-height: 62px; padding: 4px 2px 3px; display: flex; flex-direction: column; position: relative; }
+    
+    .day-cell {
+      background-color: var(--bg-cell);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      min-height: 62px;
+      padding: 4px 2px 3px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
     .day-cell.other-month { background-color: var(--bg-cell-empty); border-color: rgba(41, 61, 82, 0.35); opacity: 0.25; }
     .day-header { display: flex; justify-content: flex-start; padding: 0 3px 2px; }
     .day-num { font-size: 0.8rem; font-weight: 700; color: var(--text-main); line-height: 1; }
     .day-cell.weekend .day-num { color: #e57368; }
     .events-list { display: flex; flex-direction: column; gap: 3px; flex-grow: 1; }
-    .time-btn { display: block; border: none; cursor: pointer; font-size: 0.68rem; font-weight: 800; padding: 3px 1px; border-radius: 5px; text-align: center; line-height: 1.15; letter-spacing: -0.02em; transition: transform 0.1s ease, filter 0.1s ease; width: 100%; }
+
+    /* Мобильная версия кнопки события (по умолчанию) */
+    .time-btn {
+      display: block;
+      border: none;
+      cursor: pointer;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 3px 1px;
+      border-radius: 5px;
+      text-align: center;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      transition: transform 0.1s ease, filter 0.1s ease;
+      width: 100%;
+    }
+    .time-btn-time {
+      display: block;
+    }
+    .time-btn-title {
+      display: none;
+    }
     .time-btn.type-lecture { background-color: var(--cat-lecture); color: var(--cat-lecture-text); }
     .time-btn.type-club { background-color: var(--cat-club); color: var(--cat-club-text); }
     .time-btn.type-other { background-color: var(--cat-other); color: var(--cat-other-text); }
-    .time-btn:active { transform: scale(0.93); filter: brightness(0.9); }
+    .time-btn:active { transform: scale(0.94); filter: brightness(0.9); }
+
+    /* ==================== АДАПТИВ ДЛЯ КОМПЬЮТЕРОВ (Большие ячейки) ==================== */
+    @media (min-width: 768px) {
+      body {
+        padding: 28px 24px 50px;
+      }
+      .container {
+        max-width: 1040px;
+      }
+      header {
+        margin-bottom: 20px;
+      }
+      h1 {
+        font-size: 1.85rem !important;
+      }
+      .calendar-card {
+        padding: 20px 18px 22px !important;
+        border-radius: 20px !important;
+      }
+      .weekdays-grid {
+        gap: 8px !important;
+        margin-bottom: 8px !important;
+      }
+      .weekday {
+        font-size: 0.85rem !important;
+        padding: 6px 0 !important;
+      }
+      
+      /* Квадратная сетка с авто-ростом высоты при нескольких мероприятиях */
+      .days-grid {
+        gap: 8px !important;
+        grid-auto-rows: minmax(130px, auto) !important;
+      }
+      .day-cell {
+        min-height: 130px !important;
+        height: auto !important;
+        padding: 8px 6px 10px !important;
+        border-radius: 12px !important;
+        cursor: pointer;
+        transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+      }
+      .day-cell:not(.other-month):hover {
+        background-color: #213345;
+        border-color: rgba(229, 184, 59, 0.45);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+      }
+      .day-header {
+        padding: 0 4px 6px !important;
+      }
+      .day-num {
+        font-size: 0.95rem !important;
+      }
+      .events-list {
+        gap: 6px !important;
+        overflow-y: visible !important;
+      }
+
+      /* Плашка мероприятия: яркое время вверху + бледная подложка с названием */
+      .time-btn {
+        display: flex !important;
+        flex-direction: column !important;
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        border-radius: 8px !important;
+        overflow: hidden !important;
+        gap: 0 !important;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+        transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease !important;
+        text-align: left !important;
+      }
+      .time-btn:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 5px 12px rgba(0, 0, 0, 0.4) !important;
+        filter: brightness(1.08) !important;
+      }
+
+      /* Верхняя яркая плашка со временем */
+      .time-btn-time {
+        display: block !important;
+        font-size: 0.72rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.02em;
+        line-height: 1.15;
+        padding: 4px 7px !important;
+        border-radius: 7px 7px 0 0 !important;
+      }
+
+      /* Нижняя бледная плашка, выглядывающая из-под времени */
+      .time-btn-title {
+        display: block !important;
+        font-size: 0.73rem !important;
+        font-weight: 600 !important;
+        line-height: 1.25 !important;
+        word-break: break-word;
+        padding: 5px 7px 6px !important;
+        border-radius: 0 0 7px 7px !important;
+        border-width: 0 1px 1px 1px !important;
+        border-style: solid !important;
+      }
+
+      /* Цветовые вариации по категориям: Яркий верх / Бледный низ */
+      /* 1. Лекции и МК */
+      .time-btn.type-lecture .time-btn-time {
+        background-color: var(--cat-lecture);
+        color: var(--cat-lecture-text);
+      }
+      .time-btn.type-lecture .time-btn-title {
+        background-color: rgba(229, 184, 59, 0.16);
+        border-color: rgba(229, 184, 59, 0.35);
+        color: #fff7e3;
+      }
+
+      /* 2. Клубы и встречи */
+      .time-btn.type-club .time-btn-time {
+        background-color: var(--cat-club);
+        color: var(--cat-club-text);
+      }
+      .time-btn.type-club .time-btn-title {
+        background-color: rgba(158, 63, 53, 0.22);
+        border-color: rgba(158, 63, 53, 0.4);
+        color: #ffece9;
+      }
+
+      /* 3. Игры и события */
+      .time-btn.type-other .time-btn-time {
+        background-color: var(--cat-other);
+        color: var(--cat-other-text);
+      }
+      .time-btn.type-other .time-btn-title {
+        background-color: rgba(120, 146, 66, 0.22);
+        border-color: rgba(120, 146, 66, 0.4);
+        color: #f3fadc;
+      }
+
+      .modal-card {
+        max-width: 480px !important;
+      }
+    }
 
     /* Список */
     .list-view { display: none; flex-direction: column; gap: 12px; }
@@ -166,7 +368,6 @@
     .list-day-info { display: flex; flex-direction: column; gap: 1px; margin-left: 10px; }
     .list-day-month { font-size: 0.9rem; color: var(--text-muted); }
     .list-day-weekday { font-size: 0.8rem; font-weight: 600; color: var(--text-main); }
-    .list-day-divider { flex: 1; height: 1px; background: var(--border); opacity: 0.3; }
     .list-event-item { padding: 10px 14px; border-bottom: 1px solid rgba(41, 61, 82, 0.2); display: flex; align-items: flex-start; gap: 10px; }
     .list-event-item:last-child { border-bottom: none; }
     .list-event-time { font-weight: 800; font-size: 0.7rem; min-width: 40px; color: var(--text-muted); padding-top: 1px; }
@@ -178,9 +379,10 @@
     .list-event-title { font-size: 0.9rem; font-weight: 600; color: var(--text-main); line-height: 1.3; }
     .list-event-title a { color: var(--text-main); text-decoration: underline; text-decoration-color: rgba(245, 238, 220, 0.3); }
     .list-event-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; }
-    .list-event-booking { color: var(--text-muted); display: inline-flex; align-items: center; gap: 5px; background: rgba(141, 162, 181, 0.08); border: 1px solid rgba(141, 162, 181, 0.2); color: var(--text-muted) !important; font-size: 0.7rem; font-weight: 500; padding: 2px 8px; border-radius: 4px; text-decoration: none !important; transition: all 0.15s ease; margin-top: 4px; margin-bottom: 4px; }
+    .list-event-price { font-weight: 700; color: var(--cat-lecture); }
+    .list-event-booking { color: var(--text-muted); display: inline-flex; align-items: center; gap: 5px; background: rgba(141, 162, 181, 0.08); border: 1px solid rgba(141, 162, 181, 0.2); font-size: 0.7rem; font-weight: 500; padding: 2px 8px; border-radius: 4px; text-decoration: none !important; transition: all 0.15s ease; margin-top: 4px; margin-bottom: 4px; }
     .list-event-booking a { color: var(--cat-lecture); text-decoration: none; font-weight: 600; }
-    .list-today-badge { background: var(--cat-lecture); color: var(--cat-lecture-text); font-size: 0.55rem; font-weight: 700; padding: 4px 8px; border-radius: 4px; text-transform: uppercase; margin-left: 0px; }
+    .list-today-badge { background: var(--cat-lecture); color: var(--cat-lecture-text); font-size: 0.55rem; font-weight: 700; padding: 4px 8px; border-radius: 4px; text-transform: uppercase; }
     .list-empty { padding: 30px 16px; text-align: center; color: var(--text-muted); font-size: 0.9rem; }
 
     .footer-bar { margin-top: 14px; padding: 12px 14px; border-radius: 12px; text-align: center; font-size: 0.82rem; color: var(--text-muted); line-height: 1.4; }
@@ -216,8 +418,9 @@
     .event-cost { font-weight: 700; font-size: 0.85rem; color: var(--cat-lecture); }
     .event-name { font-size: 0.9rem; font-weight: 600; line-height: 1.35; color: var(--text-main); }
     .event-name a { color: var(--text-main); text-decoration: underline; text-decoration-color: rgba(245, 238, 220, 0.4); }
-    .event-action { margin-top: 2px; font-size: 0.8rem; color: var(--text-muted); }
-    .event-action a { color: var(--cat-lecture); text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; background: rgba(141, 162, 181, 0.08); border: 1px solid rgba(141, 162, 181, 0.2); font-size: 0.7rem; padding: 2px 8px; border-radius: 4px; transition: all 0.15s ease; margin-top: 4px; margin-bottom: 4px; margin-right: 3px;}
+    .event-action { margin-top: 2px; font-size: 0.8rem; color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .event-action a { color: var(--cat-lecture); text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; background: rgba(141, 162, 181, 0.08); border: 1px solid rgba(141, 162, 181, 0.2); font-size: 0.7rem; padding: 3px 8px; border-radius: 4px; transition: all 0.15s ease; }
+    .event-action a:active { background: rgba(229, 184, 59, 0.15); transform: scale(0.97); }
   </style>
 </head>
 <body>
@@ -257,6 +460,11 @@
       <div class="legend-item"><span class="legend-dot other"></span> Игры и события</div>
     </div>
 
+    <!-- Предупреждение для запуска через двойной клик (file://) -->
+    <div id="localWarning" class="local-warning-banner">
+      ⚠️ <strong>Файл открыт с локального диска (file://).</strong> Браузер блокирует прямой сетевой запрос к Google Таблицам из соображений безопасности (CORS). Чтобы данные загрузились, откройте файл через локальный сервер (например, плагин <em>Live Server</em> в VS Code) или опубликуйте на хостинге (GitHub Pages, Vercel и т.д.).
+    </div>
+
     <div class="calendar-card">
       <div class="loading-spinner" id="loadingState">
         <div class="spinner"></div>
@@ -285,6 +493,7 @@
     </div>
   </div>
 
+  <!-- Модальное окно детального просмотра дня -->
   <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
     <div class="modal-card" onclick="event.stopPropagation()">
       <div class="modal-header">
@@ -323,15 +532,17 @@
         searchInput: document.getElementById('searchInput'),
         loadingState: document.getElementById('loadingState'),
         prevBtn: document.getElementById('prevBtn'),
-        nextBtn: document.getElementById('nextBtn')
+        nextBtn: document.getElementById('nextBtn'),
+        localWarning: document.getElementById('localWarning')
       };
 
       // ==================== СОСТОЯНИЕ ====================
-      let monthsData = []; // Только месяцы, в которых ЕСТЬ события
+      let monthsData = [];
       let currentMonthIndex = 0;
       let currentView = 'calendar';
       let searchQuery = '';
 
+      // ==================== ПАРСИНГ CSV ====================
       function parseCSV(text) {
         const rows = [];
         let row = [];
@@ -399,22 +610,39 @@
       function parseDateString(str) {
         if (!str) return null;
         str = str.trim();
+        const currentYear = new Date().getFullYear();
         let year, month, day;
 
-        if (str.includes('-')) {
-          const p = str.split('-').map(Number);
-          year = p[0]; month = p[1] - 1; day = p[2];
-        } else if (str.includes('.')) {
-          const p = str.split('.').map(Number);
-          day = p[0]; month = p[1] - 1; year = p[2];
+        if (str.includes('.')) {
+          const p = str.split('.').filter(Boolean).map(Number);
+          if (p.length === 3) {
+            day = p[0]; month = p[1] - 1; year = p[2];
+          } else if (p.length === 2) {
+            day = p[0]; month = p[1] - 1; year = currentYear;
+          }
+        } else if (str.includes('-')) {
+          const p = str.split('-').filter(Boolean).map(Number);
+          if (p.length === 3) {
+            if (p[0] > 1000) {
+              year = p[0]; month = p[1] - 1; day = p[2];
+            } else {
+              day = p[0]; month = p[1] - 1; year = p[2];
+            }
+          } else if (p.length === 2) {
+            day = p[0]; month = p[1] - 1; year = currentYear;
+          }
         } else if (str.includes('/')) {
-          const p = str.split('/').map(Number);
-          day = p[0]; month = p[1] - 1; year = p[2];
+          const p = str.split('/').filter(Boolean).map(Number);
+          if (p.length === 3) {
+            day = p[0]; month = p[1] - 1; year = p[2];
+          } else if (p.length === 2) {
+            day = p[0]; month = p[1] - 1; year = currentYear;
+          }
         } else {
           return null;
         }
 
-        if (year < 100) year += 2000;
+        if (year && year < 100) year += 2000;
         if (isNaN(year) || isNaN(month) || isNaN(day) || month < 0 || month > 11 || day < 1 || day > 31) {
           return null;
         }
@@ -471,7 +699,7 @@
 
           if (currentRealMonthIdx !== -1) {
             const currentMonthObj = monthsData[currentRealMonthIdx];
-            const hasUpcomingEventsThisMonth = Object.keys(currentMonthObj.events).some(day => Number(day) > todayDate);
+            const hasUpcomingEventsThisMonth = Object.keys(currentMonthObj.events).some(day => Number(day) >= todayDate);
 
             if (!hasUpcomingEventsThisMonth && currentRealMonthIdx + 1 < monthsData.length) {
               currentMonthIndex = currentRealMonthIdx + 1;
@@ -483,19 +711,28 @@
             currentMonthIndex = futureIdx !== -1 ? futureIdx : 0;
           }
         } else {
-          const now = new Date();
-          monthsData = [{
-            name: MONTH_NAMES[now.getMonth()],
-            year: now.getFullYear(),
-            monthIndex: now.getMonth(),
-            totalDays: new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate(),
-            events: {}
-          }];
-          currentMonthIndex = 0;
+          initFallbackMonth();
         }
       }
 
+      function initFallbackMonth() {
+        const now = new Date();
+        monthsData = [{
+          name: MONTH_NAMES[now.getMonth()],
+          year: now.getFullYear(),
+          monthIndex: now.getMonth(),
+          totalDays: new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate(),
+          events: {}
+        }];
+        currentMonthIndex = 0;
+      }
+
       async function loadData() {
+        // Проверка: открыт ли файл напрямую через file://
+        if (window.location.protocol === 'file:') {
+          if (el.localWarning) el.localWarning.style.display = 'block';
+        }
+
         try {
           const cacheBusterUrl = `${GOOGLE_SHEET_CSV_URL}&_t=${Date.now()}`;
           const response = await fetch(cacheBusterUrl);
@@ -505,7 +742,11 @@
           const parsed = parseCSV(csvText);
           processParsedData(parsed);
         } catch (e) {
-          console.warn("Данные из Google Таблицы не загрузились:", e);
+          console.warn("Данные из Google Таблицы не загрузились (возможно, блокировка CORS при file://):", e);
+          // Всегда инициализируем хотя бы пустую сетку текущего месяца, чтобы страница не оставалась пустой
+          if (monthsData.length === 0) {
+            initFallbackMonth();
+          }
         } finally {
           el.loadingState.style.display = 'none';
           renderCurrentView();
@@ -582,7 +823,6 @@
 
         const realYear = new Date().getFullYear();
         el.monthTitle.textContent = `${m.name}${m.year !== realYear ? ' ' + m.year : ''}`;
-
         el.calendarGrid.innerHTML = '';
 
         const firstDayDate = new Date(m.year, m.monthIndex, 1);
@@ -607,6 +847,7 @@
 
           const cell = document.createElement('div');
           cell.className = `day-cell ${isWeekend ? 'weekend' : ''} ${isToday ? 'today' : ''}`;
+          cell.dataset.day = day;
 
           const header = document.createElement('div');
           header.className = 'day-header';
@@ -625,8 +866,17 @@
             events.forEach(ev => {
               const btn = document.createElement('button');
               btn.className = `time-btn type-${ev.type}`;
-              btn.textContent = ev.time;
               btn.dataset.day = day;
+
+              // Обрезка названия до 25 символов для компьютерной версии
+              const fullTitle = (ev.title || '').trim();
+              const shortTitle = fullTitle.length > 25 ? fullTitle.slice(0, 25).trim() + '…' : fullTitle;
+              const safeTitleAttr = fullTitle.replace(/"/g, '&quot;');
+
+              btn.innerHTML = `
+                <span class="time-btn-time">${ev.time}</span>
+                <span class="time-btn-title" title="${safeTitleAttr}">${shortTitle}</span>
+              `;
               list.appendChild(btn);
             });
             cell.appendChild(list);
@@ -805,7 +1055,8 @@
                 <span class="event-cost">${ev.price}</span>
               </div>
               <div class="event-name">${titleHTML}</div>
-              <div class="event-action"><a href="${booking.url}" target="_blank">${booking.text}</a>
+              <div class="event-action">
+                <a href="${booking.url}" target="_blank">${booking.text}</a>
                 <a href="${gcalLink}" target="_blank" class="gcal-btn">📅 Добавить в календарь</a>
               </div>
             </div>
@@ -817,9 +1068,9 @@
       }
 
       el.calendarGrid.addEventListener('click', function(e) {
-        const btn = e.target.closest('.time-btn');
-        if (!btn) return;
-        const day = parseInt(btn.dataset.day, 10);
+        const cell = e.target.closest('.day-cell:not(.other-month)');
+        if (!cell) return;
+        const day = parseInt(cell.dataset.day, 10);
         if (!isNaN(day)) openModal(day);
       });
 
