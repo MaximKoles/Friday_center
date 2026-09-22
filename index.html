@@ -332,7 +332,6 @@
       let currentView = 'calendar';
       let searchQuery = '';
 
-      // ==================== ПАРСИНГ CSV ====================
       function parseCSV(text) {
         const rows = [];
         let row = [];
@@ -462,7 +461,6 @@
           });
         });
 
-        // Формируем список ТОЛЬКО тех месяцев, где есть события, и сортируем хронологически
         const sortedKeys = Array.from(map.keys()).sort();
         monthsData = sortedKeys.map(k => map.get(k));
 
@@ -473,22 +471,18 @@
 
           if (currentRealMonthIdx !== -1) {
             const currentMonthObj = monthsData[currentRealMonthIdx];
-            // Проверяем: есть ли в текущем месяце события сегодня или в оставшиеся дни месяца
             const hasUpcomingEventsThisMonth = Object.keys(currentMonthObj.events).some(day => Number(day) > todayDate);
 
-            // Если все события текущего месяца уже прошли, и есть следующий месяц — открываем его
             if (!hasUpcomingEventsThisMonth && currentRealMonthIdx + 1 < monthsData.length) {
               currentMonthIndex = currentRealMonthIdx + 1;
             } else {
               currentMonthIndex = currentRealMonthIdx;
             }
           } else {
-            // Если в текущем месяце вообще не было событий — ищем ближайший будущий месяц
             const futureIdx = monthsData.findIndex(m => m.year > now.getFullYear() || (m.year === now.getFullYear() && m.monthIndex >= now.getMonth()));
             currentMonthIndex = futureIdx !== -1 ? futureIdx : 0;
           }
         } else {
-          // Если вообще нет событий, показываем текущий пустой месяц
           const now = new Date();
           monthsData = [{
             name: MONTH_NAMES[now.getMonth()],
@@ -518,7 +512,6 @@
         }
       }
 
-      // ==================== УТИЛИТЫ ====================
       function formatDate(year, monthIndex, day) {
         const date = new Date(year, monthIndex, day);
         const dayName = WEEKDAYS_SHORT[date.getDay()];
@@ -533,8 +526,14 @@
         const encodedMsg = encodeURIComponent(msg);
 
         if (ev.booking) {
-          const clean = ev.booking.replace('@', '').trim();
-          return { text: `Запись: ${ev.booking}`, url: `https://t.me/${clean}?text=${encodedMsg}` };
+          const trimmed = ev.booking.trim();
+          if (trimmed.startsWith('@')) {
+            const clean = trimmed.replace('@', '').trim();
+            return { text: `Запись: ${trimmed}`, url: `https://t.me/${clean}?text=${encodedMsg}` };
+          } else {
+            const url = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+            return { text: 'Запись: по ссылке', url: url };
+          }
         }
         return { text: 'ЗАПИСАТЬСЯ', url: `https://t.me/lena_timinova?text=${encodedMsg}` };
       }
@@ -575,7 +574,6 @@
         el.nextBtn.disabled = (currentMonthIndex >= monthsData.length - 1);
       }
 
-      // ==================== РЕНДЕРИНГ КАЛЕНДАРЯ ====================
       function renderCalendar() {
         const m = monthsData[currentMonthIndex];
         if (!m) return;
@@ -646,7 +644,6 @@
         }
       }
 
-      // ==================== РЕНДЕРИНГ СПИСКА ====================
       function renderList() {
         const m = monthsData[currentMonthIndex];
         if (!m) return;
@@ -738,7 +735,6 @@
         }
       }
 
-      // ==================== УПРАВЛЕНИЕ ПОИСКОМ ====================
       window.openSearch = function() {
         el.searchBarContainer.classList.add('active');
         el.searchInput.focus();
@@ -756,7 +752,6 @@
         renderCurrentView();
       });
 
-      // ==================== ПЕРЕКЛЮЧЕНИЕ МЕСЯЦЕВ И ВИДОВ ====================
       window.switchMonth = function(direction) {
         const nextIdx = currentMonthIndex + direction;
         if (nextIdx >= 0 && nextIdx < monthsData.length) {
@@ -786,7 +781,6 @@
         }
       };
 
-      // ==================== МОДАЛЬНОЕ ОКНО ====================
       function openModal(day) {
         const m = monthsData[currentMonthIndex];
         if (!m || !m.events || !m.events[day]) return;
@@ -822,7 +816,6 @@
         el.modalOverlay.classList.add('active');
       }
 
-      // ==================== ОБРАБОТЧИКИ СОБЫТИЙ ====================
       el.calendarGrid.addEventListener('click', function(e) {
         const btn = e.target.closest('.time-btn');
         if (!btn) return;
@@ -850,21 +843,19 @@
     })();
   </script>
 
-<!-- Yandex.Metrika counter -->
-<script type="text/javascript">
-    (function(m,e,t,r,i,k,a){
-        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=111928557', 'ym');
+  <!-- Yandex.Metrika counter -->
+  <script type="text/javascript">
+      (function(m,e,t,r,i,k,a){
+          m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+          m[i].l=1*new Date();
+          for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+          k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+      })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=111928557', 'ym');
 
-    ym(111928557, 'init', {ssr:true, clickmap:true, referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/111928557" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
-
-
+      ym(111928557, 'init', {ssr:true, clickmap:true, referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+  </script>
+  <noscript><div><img src="https://mc.yandex.ru/watch/111928557" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+  <!-- /Yandex.Metrika counter -->
 
 </body>
 </html>
