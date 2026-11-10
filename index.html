@@ -390,6 +390,24 @@
     .creator-credits { margin-top: 30px; text-align: center; font-size: 0.75rem; color: var(--text-dim, #5c7287); }
     .creator-credits a { color: var(--text-muted, #8da2b5); text-decoration: none; font-weight: 600; transition: color 0.15s ease; }
     .creator-credits a:hover, .creator-credits a:active { color: var(--cat-lecture, #e5b83b); text-decoration: underline; }
+    .footer-wheel { margin-top: 6px; text-align: center; }
+    .footer-wheel-btn {
+      background: none;
+      border: none;
+      padding: 2px 6px;
+      font-family: inherit;
+      font-size: 0.68rem;
+      font-weight: 500;
+      color: var(--text-dim, #5c7287);
+      text-decoration: underline;
+      text-decoration-style: dotted;
+      text-decoration-color: rgba(141, 162, 181, 0.4);
+      text-underline-offset: 3px;
+      cursor: pointer;
+      transition: color 0.15s ease, text-decoration-color 0.15s ease, transform 0.12s ease;
+    }
+    .footer-wheel-btn:hover { color: var(--cat-lecture, #e5b83b); text-decoration-color: currentColor; }
+    .footer-wheel-btn:active { transform: scale(0.97); }
     .gcal-btn { display: inline-flex; align-items: center; gap: 5px; background: rgba(141, 162, 181, 0.08); border: 1px solid rgba(141, 162, 181, 0.2); color: var(--text-muted) !important; font-size: 0.7rem; font-weight: 500; padding: 2px 8px; border-radius: 4px; text-decoration: none !important; transition: all 0.15s ease; }
     .gcal-btn:active { background: rgba(141, 162, 181, 0.18); color: var(--text-main) !important; transform: scale(0.97); }
     .day-cell.today { border: 1.5px solid var(--cat-lecture); background: rgba(229, 184, 59, 0.08); box-shadow: 0 0 10px rgba(229, 184, 59, 0.15); }
@@ -421,6 +439,408 @@
     .event-action { margin-top: 2px; font-size: 0.8rem; color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
     .event-action a { color: var(--cat-lecture); text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; background: rgba(141, 162, 181, 0.08); border: 1px solid rgba(141, 162, 181, 0.2); font-size: 0.7rem; padding: 3px 8px; border-radius: 4px; transition: all 0.15s ease; }
     .event-action a:active { background: rgba(229, 184, 59, 0.15); transform: scale(0.97); }
+
+    /* ==================== КОЛЕСО СОБЫТИЙ: ПАРЯЩАЯ КНОПКА ==================== */
+    .wheel-fab-wrap {
+      position: fixed;
+      right: calc(14px + env(safe-area-inset-right, 0px));
+      bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+      z-index: 900;
+      width: 58px;
+      height: 58px;
+    }
+    .wheel-fab-wrap.off { display: none; }
+    .wheel-fab-wrap.gone { opacity: 0; transform: scale(0.35) rotate(90deg); pointer-events: none; }
+    .wheel-fab-wrap {
+      transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.5, 0, 0.75, 0.4);
+    }
+    .wheel-fab-wrap.in { animation: fabIn 0.55s cubic-bezier(0.34, 1.5, 0.64, 1) 0.15s backwards; }
+    @keyframes fabIn {
+      from { transform: scale(0) rotate(-120deg); opacity: 0; }
+      70% { transform: scale(1.12) rotate(6deg); opacity: 1; }
+      to { transform: scale(1) rotate(0); opacity: 1; }
+    }
+    .wheel-fab {
+      position: relative;
+      width: 58px;
+      height: 58px;
+      border: 1px solid rgba(255, 217, 122, 0.6);
+      border-radius: 50%;
+      background: linear-gradient(135deg, #edb943 0%, #d4952a 58%, #bd7c1e 100%);
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.42), 0 4px 16px rgba(229, 184, 59, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.32);
+      transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s ease;
+    }
+    .wheel-fab:hover { transform: scale(1.07); box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5), 0 6px 20px rgba(229, 184, 59, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.32); }
+    .wheel-fab:active { transform: scale(0.9); }
+    .wheel-fab .wf-emoji { font-size: 1.6rem; line-height: 1; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3)); }
+    .wheel-fab::before {
+      content: '';
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      border: 2px solid rgba(229, 184, 59, 0.55);
+      opacity: 0;
+      animation: fabPulse 3s ease-out 1.2s infinite;
+      pointer-events: none;
+    }
+    @keyframes fabPulse {
+      0% { transform: scale(0.9); opacity: 0; }
+      30% { opacity: 0.55; }
+      75%, 100% { transform: scale(1.4); opacity: 0; }
+    }
+    .wheel-fab-close {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      width: 21px;
+      height: 21px;
+      padding: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 217, 122, 0.5);
+      background: rgba(24, 35, 48, 0.94);
+      color: #e5b83b;
+      font-family: inherit;
+      font-size: 0.78rem;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0.78;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      transition: transform 0.15s ease, opacity 0.15s ease, background 0.15s ease;
+    }
+    .wheel-fab-close:hover { transform: scale(1.18); opacity: 1; background: #2c3d51; }
+    .wheel-fab-close:active { transform: scale(0.9); }
+    .wheel-fab-bubble {
+      position: fixed;
+      right: calc(80px + env(safe-area-inset-right, 0px));
+      bottom: calc(27px + env(safe-area-inset-bottom, 0px));
+      z-index: 900;
+      max-width: 185px;
+      border: none;
+      background: linear-gradient(135deg, #edb943, #d4952a);
+      color: #121b24;
+      font-family: inherit;
+      font-size: 0.74rem;
+      font-weight: 700;
+      line-height: 1.3;
+      text-align: left;
+      padding: 8px 12px;
+      border-radius: 12px 12px 3px 12px;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateX(12px) scale(0.9);
+      pointer-events: none;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4), 0 2px 10px rgba(229, 184, 59, 0.25);
+      transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .wheel-fab-bubble.show { opacity: 1; transform: none; pointer-events: auto; }
+    .wheel-fab-bubble:active { transform: scale(0.95); }
+
+    .wheel-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1200;
+      background:
+        radial-gradient(90% 55% at 50% 26%, rgba(229, 184, 59, 0.15), transparent 62%),
+        rgba(9, 14, 20, 0.93);
+      backdrop-filter: blur(9px);
+      -webkit-backdrop-filter: blur(9px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+    .wheel-overlay.active { opacity: 1; visibility: visible; transition: opacity 0.32s ease, visibility 0.32s ease; }
+    .wheel-panel {
+      width: 100%;
+      max-width: 430px;
+      max-height: 100%;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2px;
+      /* скролл остаётся, но полоса прокрутки не рисуется */
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .wheel-panel::-webkit-scrollbar { display: none; width: 0; height: 0; }
+    /* --- последовательное появление элементов --- */
+    .wheel-overlay.active .wheel-panel { animation: wheelPanelIn 0.42s cubic-bezier(0.22, 1.32, 0.36, 1) backwards; }
+    @keyframes wheelPanelIn { from { transform: translateY(26px) scale(0.93); opacity: 0; } to { transform: none; opacity: 1; } }
+    .wheel-overlay.active .wheel-stage { animation: wheelStageIn 0.72s cubic-bezier(0.3, 1.25, 0.55, 1) 0.12s backwards; }
+    @keyframes wheelStageIn {
+      from { transform: scale(0.25) rotate(-170deg); opacity: 0; }
+      55% { opacity: 1; }
+      to { transform: scale(1) rotate(0); opacity: 1; }
+    }
+    .wheel-overlay.active .wheel-hub { animation: wheelHubIn 0.4s cubic-bezier(0.34, 1.6, 0.64, 1) 0.62s backwards; }
+    @keyframes wheelHubIn {
+      from { transform: translate(-50%, -50%) scale(0); }
+      70% { transform: translate(-50%, -50%) scale(1.16); }
+      to { transform: translate(-50%, -50%) scale(1); }
+    }
+    .wheel-overlay.active .wheel-pointer { animation: wheelPointerIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.7s backwards; }
+    @keyframes wheelPointerIn { from { transform: translateX(-50%) translateY(-16px); opacity: 0; } to { transform: translateX(-50%); opacity: 1; } }
+    .wheel-overlay.active .wheel-title { animation: wheelRiseIn 0.4s ease 0.16s backwards; }
+    .wheel-overlay.active .wheel-header-actions { animation: wheelRiseIn 0.4s ease 0.2s backwards; }
+    .wheel-overlay.active .wheel-subtitle { animation: wheelRiseIn 0.4s ease 0.24s backwards; }
+    .wheel-overlay.active .wheel-filters { animation: wheelRiseIn 0.4s ease 0.34s backwards; }
+    .wheel-overlay.active .wheel-count { animation: wheelRiseIn 0.4s ease 0.38s backwards; }
+    .wheel-overlay.active .wheel-spin-btn { animation: wheelRiseIn 0.4s ease 0.42s backwards; }
+    .wheel-overlay.active .wheel-note { animation: wheelRiseIn 0.4s ease 0.46s backwards; }
+    @keyframes wheelRiseIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+    .wheel-header { width: 100%; display: flex; align-items: center; justify-content: space-between; }
+    .wheel-title { font-size: 1.12rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+    .wheel-title span { color: var(--cat-lecture); }
+    .wheel-header-actions { display: flex; align-items: center; gap: 6px; }
+    .wheel-icon-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      font-size: 1.05rem;
+      line-height: 1;
+      padding: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+    .wheel-icon-btn:active { transform: scale(0.92); color: var(--cat-lecture); }
+    .wheel-subtitle { font-size: 0.82rem; color: var(--text-muted); text-align: center; line-height: 1.45; max-width: 350px; margin: 8px 0 14px; }
+
+    .wheel-stage {
+      position: relative;
+      width: min(80vw, 330px);
+      aspect-ratio: 1 / 1;
+      flex-shrink: 0;
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease, margin 0.35s ease;
+    }
+    .wheel-stage::before {
+      content: '';
+      position: absolute;
+      inset: -14%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(229, 184, 59, 0.2) 0%, transparent 65%);
+      z-index: 0;
+      animation: wheelGlow 3.4s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes wheelGlow { 0%, 100% { opacity: 0.65; transform: scale(1); } 50% { opacity: 1; transform: scale(1.06); } }
+    .wheel-rotor { position: absolute; inset: 0; z-index: 1; will-change: transform; }
+    #wheelCanvas { width: 100%; height: 100%; display: block; }
+    .wheel-hub {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      width: 30%;
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      border: 3px solid rgba(18, 27, 36, 0.6);
+      background: radial-gradient(circle at 32% 28%, #f3cd6d, #e5b83b 45%, #b97f1c 100%);
+      color: #121b24;
+      font-family: inherit;
+      font-weight: 800;
+      font-size: 0.74rem;
+      letter-spacing: 0.07em;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), inset 0 2px 3px rgba(255, 255, 255, 0.35);
+      transition: transform 0.12s ease, opacity 0.2s ease;
+    }
+    .wheel-hub:active { transform: translate(-50%, -50%) scale(0.92); }
+    .wheel-hub:disabled { opacity: 0.55; cursor: default; }
+    .wheel-pointer {
+      position: absolute;
+      top: -11px;
+      left: 50%;
+      transform: translateX(-50%);
+      transform-origin: 50% 7px;
+      z-index: 3;
+      transition: transform 0.07s ease-out;
+      filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.45));
+      pointer-events: none;
+    }
+    .wheel-pointer.kick { transform: translateX(-50%) rotate(16deg); }
+
+    .wheel-empty { display: none; padding: 34px 16px; text-align: center; color: var(--text-muted); font-size: 0.88rem; line-height: 1.55; }
+    .wheel-empty.show { display: block; }
+
+    .wheel-filters { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .wheel-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 6px 11px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .wheel-chip .chip-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .chip-dot.lecture { background: var(--cat-lecture); }
+    .chip-dot.club { background: var(--cat-club); }
+    .chip-dot.other { background: var(--cat-other); }
+    .wheel-chip.active { color: var(--text-main); border-color: rgba(229, 184, 59, 0.45); background: rgba(229, 184, 59, 0.1); }
+    .wheel-chip:not(.active) { opacity: 0.42; }
+    .wheel-chip:not(.active) .chip-dot { background: var(--text-muted); }
+    .wheel-chip:active { transform: scale(0.95); }
+
+    .wheel-count { font-size: 0.75rem; color: var(--text-muted); margin-top: 9px; text-align: center; }
+    .wheel-count b { color: var(--cat-lecture); }
+
+    .wheel-spin-btn {
+      margin-top: 14px;
+      width: 100%;
+      max-width: 330px;
+      padding: 14px 18px;
+      border: none;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #edb943 0%, #d4952a 55%, #bd7c1e 100%);
+      color: #121b24;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 0.09em;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(229, 184, 59, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      transition: transform 0.12s ease, filter 0.2s ease, box-shadow 0.2s ease;
+    }
+    .wheel-spin-btn:active { transform: scale(0.96); }
+    .wheel-spin-btn:disabled { filter: saturate(0.35) brightness(0.72); cursor: default; box-shadow: none; }
+    .wheel-note { font-size: 0.68rem; color: var(--text-dim, #5c7287); margin-top: 9px; text-align: center; }
+
+    .wheel-result {
+      display: none;
+      width: 100%;
+      margin-top: 14px;
+      background: linear-gradient(180deg, rgba(229, 184, 59, 0.15) 0%, rgba(24, 35, 48, 0.65) 75%);
+      border: 1px solid rgba(229, 184, 59, 0.5);
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 0 26px rgba(229, 184, 59, 0.12);
+      animation: wheelResultIn 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.2);
+    }
+    @keyframes wheelResultIn { from { transform: translateY(18px) scale(0.96); opacity: 0; } to { transform: none; opacity: 1; } }
+    .wheel-overlay.result-open .wheel-subtitle,
+    .wheel-overlay.result-open .wheel-filters,
+    .wheel-overlay.result-open .wheel-count,
+    .wheel-overlay.result-open .wheel-spin-btn,
+    .wheel-overlay.result-open .wheel-note { display: none; }
+    .wheel-overlay.result-open .wheel-stage { transform: scale(0.64); opacity: 0.5; margin-bottom: -56px; }
+    .wheel-overlay.result-open .wheel-result { display: block; }
+    .wheel-result-badge {
+      display: inline-block;
+      background: var(--cat-lecture);
+      color: var(--cat-lecture-text);
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.09em;
+      padding: 4px 10px;
+      border-radius: 5px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .wheel-result-name { font-size: 1.02rem; font-weight: 700; line-height: 1.35; color: var(--text-main); margin-bottom: 9px; }
+    .wheel-result-name a { color: var(--text-main); text-decoration: underline; text-decoration-color: rgba(245, 238, 220, 0.4); }
+    .wheel-result-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 13px; }
+    .wheel-result-meta .event-time-badge { font-weight: 800; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; }
+    .event-time-badge.type-lecture { background: var(--cat-lecture); color: var(--cat-lecture-text); }
+    .event-time-badge.type-club { background: var(--cat-club); color: var(--cat-club-text); }
+    .event-time-badge.type-other { background: var(--cat-other); color: var(--cat-other-text); }
+    .wheel-result-price { font-weight: 700; color: var(--cat-lecture); }
+    .wheel-result-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .wheel-cta {
+      flex: 1;
+      min-width: 140px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #edb943, #cf8f26);
+      color: #121b24 !important;
+      text-decoration: none !important;
+      font-weight: 800;
+      font-size: 0.88rem;
+      padding: 11px 14px;
+      border-radius: 12px;
+      box-shadow: 0 4px 14px rgba(229, 184, 59, 0.25);
+      transition: transform 0.12s ease;
+    }
+    .wheel-cta:active { transform: scale(0.96); }
+    .wheel-again {
+      flex: 1;
+      min-width: 118px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 11px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.12s ease;
+    }
+    .wheel-again:active { transform: scale(0.96); background: rgba(229, 184, 59, 0.08); }
+    .wheel-gcal { font-size: 0.72rem; margin-top: 11px; text-align: center; }
+    .wheel-gcal a { color: var(--text-muted); text-decoration: none; font-weight: 600; }
+    .wheel-gcal a:active { color: var(--cat-lecture); }
+
+    .confetti-canvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1300; display: none; }
+    .confetti-canvas.on { display: block; }
+
+    @media (min-width: 768px) {
+      .wheel-fab-wrap { width: 64px; height: 64px; right: 20px; bottom: 24px; }
+      .wheel-fab { width: 64px; height: 64px; }
+      .wheel-fab .wf-emoji { font-size: 1.8rem; }
+      .wheel-fab-bubble { right: 94px; bottom: 36px; max-width: 210px; font-size: 0.8rem; }
+      .wheel-stage { width: 380px; }
+      .wheel-title { font-size: 1.22rem; }
+      .wheel-subtitle { font-size: 0.9rem; max-width: 400px; }
+      .wheel-spin-btn { max-width: 380px; font-size: 1.05rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .wheel-fab::before,
+      .wheel-fab-wrap.in,
+      .wheel-overlay.active .wheel-panel,
+      .wheel-overlay.active .wheel-stage,
+      .wheel-overlay.active .wheel-hub,
+      .wheel-overlay.active .wheel-pointer,
+      .wheel-overlay.active .wheel-title,
+      .wheel-overlay.active .wheel-header-actions,
+      .wheel-overlay.active .wheel-subtitle,
+      .wheel-overlay.active .wheel-filters,
+      .wheel-overlay.active .wheel-count,
+      .wheel-overlay.active .wheel-spin-btn,
+      .wheel-overlay.active .wheel-note,
+      .wheel-stage::before { animation: none; }
+    }
   </style>
 </head>
 <body>
@@ -488,6 +908,9 @@
     <div class="footer-bar">
       Запись через <a href="https://t.me/lena_timinova" target="_blank">@lena_timinova</a> или резидента события
     </div>
+    <div class="footer-wheel">
+      <button class="footer-wheel-btn" onclick="openWheel()">Крутить колесо событий</button>
+    </div>
     <div class="creator-credits">
       Сделал <a href="https://t.me/maxim_koles" target="_blank">@maxim_koles</a> с ИИ
     </div>
@@ -502,6 +925,57 @@
       </div>
       <div class="modal-body" id="modalContent"></div>
     </div>
+  </div>
+
+  <!-- ==================== КОЛЕСО СОБЫТИЙ: ПАРЯЩАЯ КНОПКА ==================== -->
+  <div class="wheel-fab-wrap off" id="wheelFabWrap">
+    <button class="wheel-fab" id="wheelFab" onclick="openWheel()" aria-label="Колесо событий — выбрать мероприятие" title="Колесо событий">
+      <span class="wf-emoji">🎡</span>
+    </button>
+    <button class="wheel-fab-close" id="wheelFabClose" onclick="hideWheelFab(event)" aria-label="Скрыть кнопку" title="Скрыть кнопку">&times;</button>
+  </div>
+  <button class="wheel-fab-bubble" id="wheelFabBubble" onclick="openWheel()">Не знаешь, что выбрать?</button>
+
+  <!-- ==================== КОЛЕСО СОБЫТИЙ: ОВЕРЛЕЙ ==================== -->
+  <div class="wheel-overlay" id="wheelOverlay">
+    <div class="wheel-panel">
+      <div class="wheel-header">
+        <div class="wheel-title"><span>✦</span> Колесо событий</div>
+        <div class="wheel-header-actions">
+          <button class="wheel-icon-btn" id="wheelSoundBtn" onclick="toggleWheelSound()" title="Звук вкл/выкл">🔊</button>
+          <button class="wheel-icon-btn" onclick="closeWheel()" title="Закрыть">&times;</button>
+        </div>
+      </div>
+
+      <p class="wheel-subtitle">Сомневаешься, что выбрать? Один оборот — и мероприятие выбрано!</p>
+
+      <div class="wheel-stage" id="wheelStage">
+        <div class="wheel-rotor" id="wheelRotor">
+          <canvas id="wheelCanvas"></canvas>
+        </div>
+        <button class="wheel-hub" id="wheelHub" onclick="spinWheel()" aria-label="Крутить колесо">КРУТИТЬ</button>
+        <div class="wheel-pointer" id="wheelPointer">
+          <svg width="30" height="36" viewBox="0 0 30 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 33.5 L4 9.5 Q15 1.5 26 9.5 Z" fill="#e5b83b" stroke="#121b24" stroke-width="2.2" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="wheel-empty" id="wheelEmpty"></div>
+
+      <div class="wheel-filters" id="wheelFilters">
+        <button class="wheel-chip active" data-type="lecture" onclick="toggleWheelType('lecture')"><span class="chip-dot lecture"></span>Лекции и МК</button>
+        <button class="wheel-chip active" data-type="club" onclick="toggleWheelType('club')"><span class="chip-dot club"></span>Клубы и встречи</button>
+        <button class="wheel-chip active" data-type="other" onclick="toggleWheelType('other')"><span class="chip-dot other"></span>Игры и события</button>
+      </div>
+
+      <div class="wheel-count" id="wheelCount"></div>
+      <button class="wheel-spin-btn" id="wheelSpinBtn" onclick="spinWheel()">КРУТИТЬ 🎡</button>
+      <div class="wheel-note" id="wheelNote">Выбирает генератор случайных чисел — честно, без подкруток 😉</div>
+
+      <div class="wheel-result" id="wheelResult"></div>
+    </div>
+    <canvas class="confetti-canvas" id="confettiCanvas"></canvas>
   </div>
 
   <script>
@@ -750,6 +1224,7 @@
         } finally {
           el.loadingState.style.display = 'none';
           renderCurrentView();
+          updateWheelEntry();
         }
       }
 
@@ -1083,11 +1558,708 @@
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
           closeModalDirect();
+          if (wheelOpen) closeWheel();
           if (el.searchBarContainer.classList.contains('active')) {
             closeSearch();
           }
         }
       });
+
+      // ==================== КОЛЕСО СОБЫТИЙ ====================
+      const WHEEL_MAX = 12;
+      const WHEEL_PALETTE = {
+        lecture: [ { bg: '#e5b83b', text: '#121b24' }, { bg: '#c99d2c', text: '#121b24' } ],
+        club:    [ { bg: '#a8443a', text: '#f5eedc' }, { bg: '#8e382f', text: '#f5eedc' } ],
+        other:   [ { bg: '#7f9a46', text: '#f5eedc' }, { bg: '#6b8238', text: '#f5eedc' } ]
+      };
+      const WHEEL_CONFETTI_COLORS = ['#e5b83b', '#ffd97a', '#f5eedc', '#a8443a', '#7f9a46'];
+      const WHEEL_REDUCED_MOTION = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const wheelDom = {
+        overlay: document.getElementById('wheelOverlay'),
+        stage: document.getElementById('wheelStage'),
+        rotor: document.getElementById('wheelRotor'),
+        canvas: document.getElementById('wheelCanvas'),
+        hub: document.getElementById('wheelHub'),
+        pointer: document.getElementById('wheelPointer'),
+        spinBtn: document.getElementById('wheelSpinBtn'),
+        note: document.getElementById('wheelNote'),
+        count: document.getElementById('wheelCount'),
+        result: document.getElementById('wheelResult'),
+        empty: document.getElementById('wheelEmpty'),
+        filters: document.getElementById('wheelFilters'),
+        soundBtn: document.getElementById('wheelSoundBtn'),
+        fabWrap: document.getElementById('wheelFabWrap'),
+        fabBubble: document.getElementById('wheelFabBubble'),
+        confettiCanvas: document.getElementById('confettiCanvas')
+      };
+
+      let wheelOpen = false;
+      let wheelState = 'idle'; // idle | spinning | celebrate | result
+      let wheelRotation = 0;
+      let wheelEvents = [];
+      let wheelWinnerIdx = -1;
+      let wheelLastTickIdx = -1;
+      let wheelLastTickSound = 0;
+      let wheelKickTimer = null;
+      let wheelRAF = null;
+      let wheelLastFrame = 0;
+      let wheelSpinAnim = null;
+      let wheelPulseUntil = 0;
+      let wheelTypeFilter = { lecture: true, club: true, other: true };
+      let wheelSound = true;
+      let wheelAudio = null;
+      let wheelAudioMaster = null;
+      let wheelNoiseBuf = null;
+      let confettiParts = [];
+      let confettiRAF = null;
+      let wheelFabShown = false;
+      let wheelBubbleTimers = [];
+      try { wheelSound = localStorage.getItem('fridayWheelSound') !== '0'; } catch (err) { wheelSound = true; }
+
+      function wheelMeta(goal) {
+        if (typeof ym === 'function') {
+          try { ym(111928557, 'reachGoal', goal); } catch (err) {}
+        }
+      }
+
+      function wheelRandInt(n) {
+        if (window.crypto && crypto.getRandomValues) {
+          const limit = Math.floor(4294967296 / n) * n;
+          const buf = new Uint32Array(1);
+          let v;
+          do { crypto.getRandomValues(buf); v = buf[0]; } while (v >= limit);
+          return v % n;
+        }
+        return Math.floor(Math.random() * n);
+      }
+
+      function wheelRand01() { return wheelRandInt(1000000) / 1000000; }
+
+      function mod360(d) { return ((d % 360) + 360) % 360; }
+
+      function wheelVibrate(pattern) {
+        if (navigator.vibrate) { try { navigator.vibrate(pattern); } catch (err) {} }
+      }
+
+      function wheelPlural(n) {
+        const m10 = n % 10, m100 = n % 100;
+        if (m10 === 1 && m100 !== 11) return 'мероприятие';
+        if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return 'мероприятия';
+        return 'мероприятий';
+      }
+
+      function wheelEnsureAudio() {
+        if (!wheelSound) return;
+        try {
+          if (!wheelAudio) {
+            const AC = window.AudioContext || window.webkitAudioContext;
+            if (!AC) return;
+            wheelAudio = new AC();
+            // мягкий лимитер: звук остаётся ровным и не режет слух
+            const comp = wheelAudio.createDynamicsCompressor();
+            comp.threshold.value = -20;
+            comp.knee.value = 26;
+            comp.ratio.value = 6;
+            comp.attack.value = 0.004;
+            comp.release.value = 0.2;
+            wheelAudioMaster = wheelAudio.createGain();
+            wheelAudioMaster.gain.value = 0.85;
+            wheelAudioMaster.connect(comp);
+            comp.connect(wheelAudio.destination);
+          }
+          if (wheelAudio.state === 'suspended') wheelAudio.resume();
+        } catch (err) { wheelAudio = null; }
+      }
+
+      function wheelNoiseBuffer() {
+        if (!wheelAudio) return null;
+        if (!wheelNoiseBuf) {
+          const len = Math.floor(wheelAudio.sampleRate * 0.6);
+          wheelNoiseBuf = wheelAudio.createBuffer(1, len, wheelAudio.sampleRate);
+          const d = wheelNoiseBuf.getChannelData(0);
+          for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+        }
+        return wheelNoiseBuf;
+      }
+
+      // Универсальный мягкий тон: attack → плавный спад, без щелчков
+      function wheelTone(opt) {
+        const t = opt.t;
+        const osc = wheelAudio.createOscillator();
+        const g = wheelAudio.createGain();
+        osc.type = opt.type || 'sine';
+        osc.frequency.setValueAtTime(opt.f, t);
+        if (opt.fEnd) osc.frequency.exponentialRampToValueAtTime(opt.fEnd, t + opt.d);
+        const a = opt.a || 0.008;
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(opt.v, t + a);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + opt.d);
+        osc.connect(g);
+        g.connect(opt.out || wheelAudioMaster);
+        osc.start(t);
+        osc.stop(t + opt.d + 0.06);
+      }
+
+      // Мягкий «вжух» на фильтрованном шуме
+      function wheelWhoosh(t0, dur, f0, f1, vol) {
+        const buf = wheelNoiseBuffer();
+        if (!buf) return;
+        const src = wheelAudio.createBufferSource();
+        src.buffer = buf;
+        const bp = wheelAudio.createBiquadFilter();
+        bp.type = 'bandpass';
+        bp.Q.value = 1.2;
+        bp.frequency.setValueAtTime(f0, t0);
+        bp.frequency.exponentialRampToValueAtTime(f1, t0 + dur);
+        const g = wheelAudio.createGain();
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.exponentialRampToValueAtTime(vol, t0 + dur * 0.4);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+        src.connect(bp);
+        bp.connect(g);
+        g.connect(wheelAudioMaster);
+        src.start(t0);
+        src.stop(t0 + dur + 0.05);
+      }
+
+      // Приятный «деревянный» тик — тёплый, с легкой вариацией тона
+      function wheelPlayTick() {
+        if (!wheelSound || !wheelAudio) return;
+        const now = performance.now();
+        if (now - wheelLastTickSound < 45) return;
+        wheelLastTickSound = now;
+        try {
+          const t = wheelAudio.currentTime;
+          const jit = 1 + (Math.random() * 0.08 - 0.04);
+          wheelTone({ f: 640 * jit, t: t, d: 0.075, v: 0.05, type: 'triangle' });
+          wheelTone({ f: 1280 * jit, t: t, d: 0.04, v: 0.011, type: 'sine' });
+        } catch (err) {}
+      }
+
+      function wheelPlayOpen() {
+        if (!wheelSound || !wheelAudio) return;
+        try {
+          const t = wheelAudio.currentTime;
+          wheelWhoosh(t, 0.42, 320, 980, 0.045);
+          wheelTone({ f: 880, t: t + 0.18, d: 0.45, v: 0.02, type: 'sine', a: 0.02 });
+          wheelTone({ f: 1174.7, t: t + 0.26, d: 0.4, v: 0.012, type: 'sine', a: 0.02 });
+        } catch (err) {}
+      }
+
+      function wheelPlayClose() {
+        if (!wheelSound || !wheelAudio) return;
+        try {
+          const t = wheelAudio.currentTime;
+          wheelWhoosh(t, 0.3, 820, 300, 0.03);
+        } catch (err) {}
+      }
+
+      function wheelPlaySpinStart() {
+        if (!wheelSound || !wheelAudio) return;
+        try {
+          const t = wheelAudio.currentTime;
+          wheelWhoosh(t, 0.32, 420, 1350, 0.04);
+        } catch (err) {}
+      }
+
+      // Тёплый победный перезвон: мягкое арпеджио на синусах + лёгкая подложка
+      function wheelPlayWin() {
+        if (!wheelSound || !wheelAudio) return;
+        try {
+          const t = wheelAudio.currentTime + 0.02;
+          // подложка — мягкий мажорный аккорд
+          wheelTone({ f: 261.63, t: t, d: 1.3, v: 0.02, type: 'sine', a: 0.05 });
+          wheelTone({ f: 392.0, t: t + 0.02, d: 1.3, v: 0.016, type: 'sine', a: 0.05 });
+          wheelTone({ f: 523.25, t: t + 0.04, d: 1.3, v: 0.018, type: 'sine', a: 0.05 });
+          // арпеджио
+          [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+            wheelTone({ f: f, t: t + i * 0.1, d: 0.55, v: 0.045, type: 'sine', a: 0.015 });
+          });
+          // финальный блик
+          wheelTone({ f: 1318.5, t: t + 0.44, d: 0.55, v: 0.013, type: 'sine', a: 0.015 });
+        } catch (err) {}
+      }
+
+      function collectUpcomingEvents() {
+        const now = new Date();
+        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+        const all = [];
+        monthsData.forEach(m => {
+          for (let day = 1; day <= m.totalDays; day++) {
+            const dateObj = new Date(m.year, m.monthIndex, day);
+            if (dateObj.getTime() < todayStart) continue;
+            const dayEvents = (m.events && m.events[day]) || [];
+            dayEvents.forEach(ev => {
+              all.push({ ev: ev, day: day, year: m.year, monthIndex: m.monthIndex, dateObj: dateObj });
+            });
+          }
+        });
+        all.sort((a, b) => (a.dateObj - b.dateObj) || String(a.ev.time).localeCompare(String(b.ev.time)));
+        return all;
+      }
+
+      let wheelFabHiddenByUserFlag = false; // скрытие действует только до перезагрузки страницы
+
+      function hideWheelBubble() {
+        wheelBubbleTimers.forEach(t => clearTimeout(t));
+        wheelBubbleTimers = [];
+        if (wheelDom.fabBubble) wheelDom.fabBubble.classList.remove('show');
+      }
+
+      function maybeShowWheelBubble() {
+        if (!wheelDom.fabBubble || wheelOpen || wheelDom.fabWrap.classList.contains('off')) return;
+        wheelBubbleTimers.push(setTimeout(() => {
+          if (!wheelOpen && !wheelDom.fabWrap.classList.contains('off')) {
+            wheelDom.fabBubble.classList.add('show');
+          }
+        }, 1900));
+        wheelBubbleTimers.push(setTimeout(hideWheelBubble, 8200));
+      }
+
+      function showWheelFab(animated) {
+        if (!wheelDom.fabWrap) return;
+        wheelDom.fabWrap.classList.remove('off', 'gone');
+        if (animated) {
+          wheelDom.fabWrap.classList.remove('in');
+          void wheelDom.fabWrap.offsetWidth; // перезапуск анимации
+          wheelDom.fabWrap.classList.add('in');
+        }
+        wheelFabShown = true;
+      }
+
+      function hideWheelFab(e) {
+        if (e) { e.stopPropagation(); e.preventDefault(); }
+        wheelFabHiddenByUserFlag = true; // только до следующей перезагрузки страницы
+        hideWheelBubble();
+        if (!wheelDom.fabWrap) return;
+        wheelDom.fabWrap.classList.remove('in');
+        wheelDom.fabWrap.classList.add('gone');
+        setTimeout(() => { wheelDom.fabWrap.classList.add('off'); wheelDom.fabWrap.classList.remove('gone'); }, 300);
+        wheelMeta('wheel_fab_hide');
+      }
+
+      function updateWheelEntry() {
+        if (!wheelDom.fabWrap) return;
+        const hasUpcoming = collectUpcomingEvents().length > 0;
+        if (!hasUpcoming || wheelFabHiddenByUserFlag) {
+          hideWheelBubble();
+          wheelDom.fabWrap.classList.add('off');
+          wheelFabShown = false;
+          return;
+        }
+        showWheelFab(!wheelFabShown);
+        maybeShowWheelBubble();
+      }
+
+      function applyWheelRotation() {
+        wheelDom.rotor.style.transform = 'rotate(' + wheelRotation + 'deg)';
+      }
+
+      function setWheelControlsDisabled(dis) {
+        wheelDom.hub.disabled = dis;
+        wheelDom.spinBtn.disabled = dis;
+        wheelDom.spinBtn.textContent = dis ? 'КРУТИМ...' : 'КРУТИТЬ 🎡';
+      }
+
+      function hideWheelResult() {
+        wheelDom.overlay.classList.remove('result-open');
+      }
+
+      function sizeWheelCanvas() {
+        const c = wheelDom.canvas;
+        const stageW = wheelDom.stage.clientWidth;
+        if (!stageW) return;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+        c.width = Math.round(stageW * dpr);
+        c.height = Math.round(stageW * dpr);
+        c.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
+        drawWheel();
+      }
+
+      function drawWheel() {
+        const c = wheelDom.canvas;
+        const w = wheelDom.stage.clientWidth;
+        if (!w || !wheelEvents.length) return;
+        const ctx = c.getContext('2d');
+        ctx.clearRect(0, 0, w, w);
+        const cx = w / 2, cy = w / 2;
+        const R = w / 2 - 7;
+        const n = wheelEvents.length;
+        const step = (Math.PI * 2) / n;
+
+        const typeCount = { lecture: 0, club: 0, other: 0 };
+        const segColors = wheelEvents.map(it => {
+          const t = WHEEL_PALETTE[it.ev.type] ? it.ev.type : 'other';
+          return WHEEL_PALETTE[t][typeCount[t]++ % 2];
+        });
+
+        for (let i = 0; i < n; i++) {
+          const a0 = -Math.PI / 2 + i * step;
+          const a1 = a0 + step;
+          ctx.beginPath();
+          ctx.moveTo(cx, cy);
+          ctx.arc(cx, cy, R, a0, a1);
+          ctx.closePath();
+          ctx.fillStyle = segColors[i].bg;
+          ctx.fill();
+          ctx.lineWidth = 1.5;
+          ctx.strokeStyle = 'rgba(18, 27, 36, 0.45)';
+          ctx.stroke();
+
+          if (i === wheelWinnerIdx) {
+            const puls = wheelState === 'celebrate' ? 0.6 + 0.4 * Math.sin(Date.now() / 130) : 0.85;
+            ctx.save();
+            ctx.globalAlpha = Math.max(0.35, puls);
+            ctx.shadowColor = 'rgba(255, 217, 122, 0.95)';
+            ctx.shadowBlur = 18;
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.22)';
+            ctx.fill();
+            ctx.restore();
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.arc(cx, cy, R, a0, a1);
+            ctx.closePath();
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#ffd97a';
+            ctx.stroke();
+          }
+        }
+
+        const fTime = n <= 6 ? 12 : (n <= 9 ? 11 : 10);
+        const fTitle = n <= 6 ? 12.5 : (n <= 9 ? 11.5 : 10.5);
+        const maxW = Math.max(46, R - (n <= 6 ? 52 : (n <= 9 ? 62 : 72)));
+        for (let i = 0; i < n; i++) {
+          const ev = wheelEvents[i].ev;
+          const mid = -Math.PI / 2 + (i + 0.5) * step;
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.rotate(mid);
+          ctx.textAlign = 'right';
+          ctx.textBaseline = 'middle';
+          ctx.fillStyle = segColors[i].text;
+          ctx.font = '700 ' + fTime + 'px Inter, Arial, sans-serif';
+          ctx.fillText(ev.time || '', R - 16, -9);
+          ctx.font = '600 ' + fTitle + 'px Inter, Arial, sans-serif';
+          let title = ev.title || '';
+          if (ctx.measureText(title).width > maxW) {
+            let cut = title;
+            while (cut.length > 1 && ctx.measureText(cut + '…').width > maxW) {
+              cut = cut.slice(0, -1);
+            }
+            title = cut.replace(/[\s,.;:]+$/, '') + '…';
+          }
+          ctx.fillText(title, R - 16, 9);
+          ctx.restore();
+        }
+
+        ctx.beginPath();
+        ctx.arc(cx, cy, R + 2.5, 0, Math.PI * 2);
+        ctx.lineWidth = 6;
+        ctx.strokeStyle = '#e5b83b';
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(cx, cy, R + 6.5, 0, Math.PI * 2);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'rgba(229, 184, 59, 0.35)';
+        ctx.stroke();
+      }
+
+      function wheelTickNow() {
+        wheelPlayTick();
+        wheelVibrate(4);
+        wheelDom.pointer.classList.add('kick');
+        if (wheelKickTimer) clearTimeout(wheelKickTimer);
+        wheelKickTimer = setTimeout(() => wheelDom.pointer.classList.remove('kick'), 70);
+      }
+
+      function wheelLoop(now) {
+        if (!wheelOpen) { wheelRAF = null; return; }
+        const dt = wheelLastFrame ? Math.min(now - wheelLastFrame, 64) : 16;
+        wheelLastFrame = now;
+
+        if (wheelState === 'idle') {
+          if (!WHEEL_REDUCED_MOTION) {
+            wheelRotation = mod360(wheelRotation + dt * 0.009);
+            applyWheelRotation();
+          }
+        } else if (wheelState === 'spinning' && wheelSpinAnim) {
+          const s = wheelSpinAnim;
+          const t = Math.min(1, (now - s.t0) / s.dur);
+          const ease = 1 - Math.pow(1 - t, 4);
+          wheelRotation = s.from + (s.target - s.from) * ease;
+          applyWheelRotation();
+          const idx = Math.floor(mod360(-wheelRotation) / (360 / wheelEvents.length)) % wheelEvents.length;
+          if (idx !== wheelLastTickIdx) {
+            wheelLastTickIdx = idx;
+            wheelTickNow();
+          }
+          if (t >= 1) finishWheelSpin();
+        } else if (wheelState === 'celebrate') {
+          if (now < wheelPulseUntil) {
+            drawWheel();
+          } else {
+            wheelState = 'result';
+            drawWheel();
+          }
+        }
+        wheelRAF = requestAnimationFrame(wheelLoop);
+      }
+
+      function spinWheel() {
+        if (!wheelOpen || wheelState === 'spinning' || wheelEvents.length === 0) return;
+        wheelEnsureAudio();
+        wheelPlaySpinStart();
+        wheelMeta('wheel_spin');
+        hideWheelResult();
+        wheelWinnerIdx = -1;
+        wheelLastTickIdx = -1;
+
+        const n = wheelEvents.length;
+        const stepDeg = 360 / n;
+        const winIdx = wheelRandInt(n);
+        const inset = (0.22 + wheelRand01() * 0.56) * stepDeg;
+        const targetBase = mod360(-(winIdx * stepDeg + inset));
+        const turns = 5 + Math.floor(wheelRand01() * 3);
+        const target = wheelRotation + turns * 360 + mod360(targetBase - mod360(wheelRotation));
+
+        wheelSpinAnim = {
+          from: wheelRotation,
+          target: target,
+          t0: performance.now(),
+          dur: 4300 + wheelRand01() * 1500
+        };
+        wheelState = 'spinning';
+        setWheelControlsDisabled(true);
+        if (!wheelRAF) { wheelLastFrame = 0; wheelRAF = requestAnimationFrame(wheelLoop); }
+      }
+
+      function finishWheelSpin() {
+        const n = wheelEvents.length;
+        wheelWinnerIdx = Math.floor(mod360(-wheelRotation) / (360 / n)) % n;
+        wheelSpinAnim = null;
+        wheelState = 'celebrate';
+        wheelPulseUntil = performance.now() + 2400;
+        wheelPlayWin();
+        wheelVibrate([28, 40, 28, 40, 70]);
+        fireConfetti();
+        wheelMeta('wheel_result');
+        setTimeout(() => showWheelResult(wheelWinnerIdx), 650);
+      }
+
+      function showWheelResult(idx) {
+        const item = wheelEvents[idx];
+        if (!item || !wheelOpen) return;
+        const ev = item.ev;
+        const booking = getBookingInfo(ev, item.year, item.monthIndex, item.day);
+        const titleHTML = getEventTitleHTML(ev);
+        const gcalLink = getGoogleCalendarLink(item.year, item.monthIndex, item.day, ev);
+        const typeClass = ev.type || 'other';
+
+        wheelDom.result.innerHTML =
+          '<div class="wheel-result-badge">✦ Выпало</div>' +
+          '<div class="wheel-result-name">' + titleHTML + '</div>' +
+          '<div class="wheel-result-meta">' +
+            '<span>' + formatDate(item.year, item.monthIndex, item.day) + '</span>' +
+            '<span class="event-time-badge type-' + typeClass + '">' + ev.time + '</span>' +
+            '<span class="wheel-result-price">' + (ev.price || 'Уточняйте') + '</span>' +
+          '</div>' +
+          '<div class="wheel-result-actions">' +
+            '<a class="wheel-cta" id="wheelBookingLink" href="' + booking.url + '" target="_blank">Записаться →</a>' +
+            '<button class="wheel-again" onclick="resetWheelForSpin()">Крутить ещё</button>' +
+          '</div>' +
+          '<div class="wheel-gcal"><a href="' + gcalLink + '" target="_blank">📅 Добавить в Google Календарь</a></div>';
+
+        wheelDom.overlay.classList.add('result-open');
+        setWheelControlsDisabled(false);
+        const bl = document.getElementById('wheelBookingLink');
+        if (bl) bl.addEventListener('click', () => wheelMeta('wheel_booking'));
+        const panel = wheelDom.overlay.querySelector('.wheel-panel');
+        if (panel) panel.scrollTop = panel.scrollHeight;
+      }
+
+      function resetWheelForSpin() {
+        hideWheelResult();
+        wheelWinnerIdx = -1;
+        wheelState = 'idle';
+        setWheelControlsDisabled(false);
+        drawWheel();
+      }
+
+      function rebuildWheelData() {
+        const all = collectUpcomingEvents();
+        const filtered = all.filter(it => wheelTypeFilter[it.ev.type] !== false);
+        wheelEvents = filtered.slice(0, WHEEL_MAX);
+        wheelWinnerIdx = -1;
+        wheelSpinAnim = null;
+        wheelState = 'idle';
+        hideWheelResult();
+        setWheelControlsDisabled(false);
+
+        const hasAny = all.length > 0;
+        const empty = wheelEvents.length === 0;
+        wheelDom.stage.style.display = empty ? 'none' : '';
+        wheelDom.spinBtn.style.display = empty ? 'none' : '';
+        wheelDom.note.style.display = empty ? 'none' : '';
+        wheelDom.filters.style.display = hasAny ? '' : 'none';
+        wheelDom.empty.classList.toggle('show', empty);
+        wheelDom.empty.innerHTML = hasAny
+          ? '🤔 Все категории выключены.<br>Включи хотя бы одну из них — и крути снова!'
+          : '🎪 Предстоящих мероприятий пока нет.<br>Загляни в календарь позже!';
+
+        if (empty) {
+          wheelDom.count.innerHTML = '';
+          return;
+        }
+        let html;
+        if (wheelEvents.length === 1) {
+          html = 'На колесе <b>1</b> мероприятие — выбор очевиден 😉';
+        } else {
+          html = 'На колесе <b>' + wheelEvents.length + '</b> ' + wheelPlural(wheelEvents.length);
+          if (filtered.length > WHEEL_MAX) html += ' — ближайшие из ' + filtered.length;
+        }
+        wheelDom.count.innerHTML = html;
+        sizeWheelCanvas();
+      }
+
+      function updateChipClasses() {
+        wheelDom.filters.querySelectorAll('.wheel-chip').forEach(ch => {
+          ch.classList.toggle('active', wheelTypeFilter[ch.dataset.type] === true);
+        });
+      }
+
+      function toggleWheelType(t) {
+        wheelTypeFilter[t] = !wheelTypeFilter[t];
+        updateChipClasses();
+        rebuildWheelData();
+      }
+
+      function updateWheelSoundBtn() {
+        wheelDom.soundBtn.textContent = wheelSound ? '🔊' : '🔇';
+      }
+
+      function toggleWheelSound() {
+        wheelSound = !wheelSound;
+        try { localStorage.setItem('fridayWheelSound', wheelSound ? '1' : '0'); } catch (err) {}
+        updateWheelSoundBtn();
+        if (wheelSound) { wheelEnsureAudio(); wheelPlayTick(); }
+      }
+
+      function openWheel() {
+        wheelOpen = true;
+        hideWheelBubble();
+        rebuildWheelData();
+        updateWheelSoundBtn();
+        wheelEnsureAudio();
+        wheelPlayOpen();
+        wheelMeta('wheel_open');
+        applyWheelRotation();
+        wheelDom.overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        if (!wheelRAF) { wheelLastFrame = 0; wheelRAF = requestAnimationFrame(wheelLoop); }
+      }
+
+      function closeWheel() {
+        wheelPlayClose();
+        wheelOpen = false;
+        wheelDom.overlay.classList.remove('active', 'result-open');
+        document.body.style.overflow = '';
+        if (wheelRAF) { cancelAnimationFrame(wheelRAF); wheelRAF = null; }
+        stopConfetti();
+      }
+
+      function fireConfetti() {
+        const c = wheelDom.confettiCanvas;
+        if (!c) return;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        c.width = Math.round(window.innerWidth * dpr);
+        c.height = Math.round(window.innerHeight * dpr);
+        c.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
+        c.classList.add('on');
+        const cx = window.innerWidth / 2;
+        const cy = window.innerHeight * 0.34;
+        confettiParts = [];
+        for (let b = 0; b < 2; b++) {
+          for (let i = 0; i < 80; i++) {
+            const ang = (-90 + (Math.random() * 130 - 65)) * Math.PI / 180;
+            const sp = 7 + Math.random() * 9;
+            confettiParts.push({
+              x: cx,
+              y: cy,
+              vx: Math.cos(ang) * sp * (0.7 + Math.random() * 0.6),
+              vy: Math.sin(ang) * sp,
+              w: 5 + Math.random() * 6,
+              h: 8 + Math.random() * 8,
+              rot: Math.random() * Math.PI,
+              vr: (Math.random() - 0.5) * 0.3,
+              color: WHEEL_CONFETTI_COLORS[Math.floor(Math.random() * WHEEL_CONFETTI_COLORS.length)],
+              born: performance.now() + b * 280,
+              life: 2000 + Math.random() * 1000
+            });
+          }
+        }
+        if (!confettiRAF) confettiRAF = requestAnimationFrame(confettiLoop);
+      }
+
+      function confettiLoop(now) {
+        const c = wheelDom.confettiCanvas;
+        const ctx = c.getContext('2d');
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        let alive = false;
+        for (let i = 0; i < confettiParts.length; i++) {
+          const p = confettiParts[i];
+          if (now < p.born) { alive = true; continue; }
+          const age = now - p.born;
+          if (age > p.life) continue;
+          alive = true;
+          p.vy += 0.22;
+          p.vx *= 0.992;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vr;
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, 1 - age / p.life);
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          ctx.restore();
+        }
+        if (alive && wheelOpen) {
+          confettiRAF = requestAnimationFrame(confettiLoop);
+        } else {
+          ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+          c.classList.remove('on');
+          confettiRAF = null;
+        }
+      }
+
+      function stopConfetti() {
+        if (confettiRAF) { cancelAnimationFrame(confettiRAF); confettiRAF = null; }
+        confettiParts = [];
+        const c = wheelDom.confettiCanvas;
+        if (c) {
+          c.getContext('2d').clearRect(0, 0, c.width, c.height);
+          c.classList.remove('on');
+        }
+      }
+
+      window.openWheel = openWheel;
+      window.closeWheel = closeWheel;
+      window.spinWheel = spinWheel;
+      window.toggleWheelType = toggleWheelType;
+      window.toggleWheelSound = toggleWheelSound;
+      window.resetWheelForSpin = resetWheelForSpin;
+      window.hideWheelFab = hideWheelFab;
+
+      window.addEventListener('resize', () => {
+        if (wheelOpen && wheelEvents.length) sizeWheelCanvas();
+      });
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => {
+          if (wheelOpen && wheelEvents.length) drawWheel();
+        });
+      }
 
       // ==================== СТАРТ ====================
       loadData();
