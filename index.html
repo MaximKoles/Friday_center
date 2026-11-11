@@ -1064,7 +1064,15 @@
           'price': 'price', 'цена': 'price', 'стоимость': 'price',
           'type': 'type', 'тип': 'type', 'категория': 'type',
           'booking': 'booking', 'запись': 'booking', 'контакт': 'booking',
-          'link': 'link', 'ссылка': 'link'
+          'link': 'link', 'ссылка': 'link',
+          // Колонка «Скрыть в Колесе событий» (галочка в Google Таблице)
+          'скрыть в колесе событий': 'hideinwheel',
+          'скрыть в колесе событии': 'hideinwheel',
+          'скрыть в колесе': 'hideinwheel',
+          'скрыть': 'hideinwheel',
+          'hideinwheel': 'hideinwheel',
+          'hide in wheel': 'hideinwheel',
+          'hidden': 'hideinwheel'
         };
 
         const headers = rows[0].map(h => {
@@ -1123,6 +1131,27 @@
         return { year, month, day };
       }
 
+      // Чекбокс из Google Таблиц в CSV приходит строкой TRUE/FALSE; на всякий
+      // случай понимаем и другие распространённые варианты отметки.
+      function flagIsOn(v) {
+        if (v === undefined || v === null) return false;
+        const s = String(v).trim().toLowerCase();
+        return s === 'true' || s === 'истина' || s === 'да' || s === 'yes' || s === 'y' ||
+               s === '1' || s === 'v' || s === 'x' || s === '+' || s === '✓' || s === 'on';
+      }
+
+      function isHiddenInWheel(row) {
+        if (flagIsOn(row.hideinwheel)) return true;
+        // Страховка: если заголовок колонки чуть отличается («Скрыть…», «Hidden…»),
+        // всё равно распознаем галочку.
+        for (const k in row) {
+          if (k.indexOf('скрыт') !== -1 || k.indexOf('hidden') !== -1 || k.indexOf('hide') !== -1) {
+            if (flagIsOn(row[k])) return true;
+          }
+        }
+        return false;
+      }
+
       function processParsedData(parsedRows) {
         const map = new Map();
 
@@ -1159,7 +1188,8 @@
             link: row.link || '',
             price: row.price || 'Уточняйте',
             booking: row.booking || '',
-            type: type
+            type: type,
+            hideInWheel: isHiddenInWheel(row) // колонка «Скрыть в Колесе событий»
           });
         });
 
@@ -1791,6 +1821,9 @@
             if (dateObj.getTime() < todayStart) continue;
             const dayEvents = (m.events && m.events[day]) || [];
             dayEvents.forEach(ev => {
+              // События с галочкой «Скрыть в Колесе событий» не попадают на колесо,
+              // но остаются в календаре и списке.
+              if (ev.hideInWheel) return;
               all.push({ ev: ev, day: day, year: m.year, monthIndex: m.monthIndex, dateObj: dateObj });
             });
           }
@@ -2105,7 +2138,7 @@
         wheelDom.empty.classList.toggle('show', empty);
         wheelDom.empty.innerHTML = hasAny
           ? '🤔 Все категории выключены.<br>Включи хотя бы одну из них — и крути снова!'
-          : '🎪 Предстоящих мероприятий пока нет.<br>Загляни в календарь позже!';
+          : '🎪 На колесе сейчас нет событий.<br>Загляни в календарь позже!';
 
         if (empty) {
           wheelDom.count.innerHTML = '';
